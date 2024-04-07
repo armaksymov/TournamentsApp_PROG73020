@@ -1,11 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using MTournamentsApp.Entities;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 string? connectionString = builder.Configuration.GetConnectionString("TournamentsDB");
-//Uncomment after the TournamentsContext was added.
-//builder.Services.AddDbContext<TournamentsContext>(opt => opt.UseSqlServer(connectionString));
+builder.Services.AddDbContext<TournamentsDbContext>(opt => opt.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
