@@ -16,12 +16,13 @@ namespace MTournamentsApp.Entities
         [TournamentDateValidation]
         public DateTime? TournamentDate {  get; set; }
 
-        public string? AddressID { get; set; }
+        public int? AddressID { get; set; }
         public Address? Address { get; set; }
 
         public string? TournamentGameId { get; set; }
         public Game? TournamentGame { get; set; }
 
+        public List<string>? TeamIds {  get; set; }
         public ICollection<Team>? TournamentTeams { get; set; }
     }
 }
