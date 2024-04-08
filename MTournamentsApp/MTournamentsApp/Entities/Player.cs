@@ -17,17 +17,7 @@ namespace MTournamentsApp.Entities
         [Column(TypeName = "datetime")]
         [Required(ErrorMessage = "Please provide the player's first name")]
         [BirthDateValidation]
-        public DateTime DateOfBirth
-        {
-            get
-            {
-                return DateOfBirth.Date;
-            }
-            set
-            {
-                DateOfBirth = value;
-            }
-        }
+        public DateTime DateOfBirth { get; set; }
 
         public int? Age
         {

@@ -22,7 +22,7 @@ namespace MTournamentsApp.Entities
         public string? TournamentGameId { get; set; }
         public Game? TournamentGame { get; set; }
 
-        public List<string>? TeamIds {  get; set; }
+        public ICollection<string>? TeamIds {  get; set; }
         public ICollection<Team>? TournamentTeams { get; set; }
     }
 }
