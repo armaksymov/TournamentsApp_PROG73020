@@ -35,11 +35,6 @@ namespace MTournamentsApp.Entities
                 .WithMany()
                 .HasForeignKey(t => t.AddressID);
 
-            modelBuilder.Entity<Team>()
-                .HasMany(t => t.Players)
-                .WithOne(p => p.Team)
-                .HasForeignKey(p => p.TeamId);
-
             modelBuilder.Entity<Tournament>()
                 .HasMany(t => t.TournamentTeams)
                 .WithMany(t => t.Tournaments);
@@ -66,12 +61,12 @@ namespace MTournamentsApp.Entities
             );
 
             modelBuilder.Entity<Player>().HasData(
-                new Player() { Id = 1, FirstName = "Test", LastName = "User #1", DateOfBirth = DateTime.Parse("01-01-2000"), Age = 24, PlayerRoleId = "C", TeamId = "ConCE" },
-                new Player() { Id = 2, FirstName = "Test", LastName = "User #2", DateOfBirth = DateTime.Parse("01-01-2002"), Age = 22, PlayerRoleId = "P", TeamId = "ConCE" }
+                new Player() { Id = 1, FirstName = "Test", LastName = "User #1", DateOfBirth = DateTime.Parse("01-01-2000"), PlayerRoleId = "C", TeamId = "ConCE" },
+                new Player() { Id = 2, FirstName = "Test", LastName = "User #2", DateOfBirth = DateTime.Parse("01-01-2002"), PlayerRoleId = "P", TeamId = "ConCE" }
             );
 
             modelBuilder.Entity<Team>().HasData(
-                new Team() { TeamId = "ConCE", TeamName = "Conestoga Condors E-Sports", TeamDescription = "Conestoga's Esports Team", MainTeamGameId = "val", PlayerIds = new List<int> { 1, 2 } , TournamentIds = new List<int> { 1 } }
+                new Team() { TeamId = "ConCE", TeamName = "Conestoga Condors E-Sports", TeamDescription = "Conestoga's Esports Team", MainTeamGameId = "val", PlayerIds = new List<int> { 1, 2 }, TournamentIds = new List<int> { 1 } }
             );
 
             modelBuilder.Entity<Tournament>().HasData(

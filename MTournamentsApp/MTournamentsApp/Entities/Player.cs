@@ -33,17 +33,12 @@ namespace MTournamentsApp.Entities
 
                 return age;
             }
-            set
-            {
-                Age = value;
-            }
         }
 
         public string? PlayerRoleId { get; set; }
-
         public PlayerRole? Role { get; set; }
 
         public string? TeamId { get; set;}
-        public Team Team { get; set; } = null!;
+        public Team? Team { get; set; }
     }
 }
