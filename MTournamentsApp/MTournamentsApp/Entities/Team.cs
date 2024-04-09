@@ -11,10 +11,10 @@
         public string? MainTeamGameId { get; set; }
         public Game? MainTeamGame { get; set; }
 
-        public ICollection<int>? PlayerIds { get; set; }
+        public List<int>? PlayerIds { get; set; }
         public ICollection<Player>? Players { get; set; }
 
-        public ICollection<int>? TournamentIds { get; set; }
+        public List<int>? TournamentIds { get; set; }
         public ICollection<Tournament>? Tournaments { get; set; }
     }
 }

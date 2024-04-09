@@ -14,7 +14,7 @@ namespace MTournamentsApp.Entities
         [Column(TypeName = "datetime")]
         [Required(ErrorMessage = "Please enter the Tournament Date")]
         [TournamentDateValidation]
-        public DateTime? TournamentDate {  get; set; }
+        public DateTime? TournamentDate { get; set; }
 
         public int? AddressID { get; set; }
         public Address? Address { get; set; }
@@ -22,7 +22,7 @@ namespace MTournamentsApp.Entities
         public string? TournamentGameId { get; set; }
         public Game? TournamentGame { get; set; }
 
-        public ICollection<string>? TeamIds {  get; set; }
+        public List<string>? TeamIds {  get; set; }
         public ICollection<Team>? TournamentTeams { get; set; }
     }
 }

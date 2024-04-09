@@ -1,0 +1,34 @@
+﻿@model List<Tournament>
+
+@{
+    ViewData["Title"] = "Tournaments List";
+}
+
+<p class="h1 mb-3">Tournaments List</p>
+<a class="btn btn-primary mb-3" asp-controller="Tournaments" asp-action="Add">Add New Tournament</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Tournament Name</th>
+            <th>Date</th>
+            <th>Game</th>
+            <th>Address</th>
+            <th># of Teams</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Tournament t in Model)
+        {
+            <tr>
+                <td>@t.TournamentName</td>
+                <td>@t.TournamentDate?.Date.ToString("MMM dd, yyyy")</td>
+                <td>@t.TournamentGame?.GameName</td>
+                <td>@t.Address?.ToString()</td>
+                <td>@t.TournamentTeams.Count()</td>
+                <td class="text-center"><a asp-controller="Tournaments" asp-action="Manage" asp-route-id="@t.Id">Manage</a><span class="mx-3">|</span><a asp-controller="Tournaments" asp-action="Edit" asp-route-id="@t.Id">Edit</a><span class="mx-3">|</span><a asp-controller="Tournaments" asp-action="Cancel" asp-route-id="@t.Id">Cancel</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

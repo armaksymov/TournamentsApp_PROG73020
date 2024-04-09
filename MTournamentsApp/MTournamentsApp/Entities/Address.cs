@@ -17,5 +17,11 @@ namespace MTournamentsApp.Entities
 
         [Required(ErrorMessage = "Please enter a Postal Code (i.e H0H 0H0)")]
         public string? TournamentPostalCode { get; set; }
+
+        override
+        public string ToString()
+        {
+            return StreetAddress + ", " + TournamentCity + ", " + TournamentCountry + ", " + TournamentPostalCode;
+        }
     }
 }
