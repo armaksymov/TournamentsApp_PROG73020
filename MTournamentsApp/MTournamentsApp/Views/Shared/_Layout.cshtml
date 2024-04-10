@@ -13,7 +13,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid align-items-center justify-content-center">
                 <div class="row mx-auto align-items-center justify-content-center">
-                    <a class="col-12 mx-auto text-center" href="#"><img src="~/lib/images/condors_logo_MTournamentZ.png" alt="Conestoga Condors Logo" style="width:12rem"></a>
+                    <a class="col-12 mx-auto text-center" asp-controller="Home" asp-action="Index"><img src="~/lib/images/condors_logo_MTournamentZ.png" alt="Conestoga Condors Logo" style="width:12rem"></a>
                     @* <a class="navbar-brand col-12 mx-0 mt-0 text-center" asp-area="" asp-controller="Home" asp-action="Index"><span style="color:#d4af37">M</span>TournamentZ</a> *@
 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +25,13 @@
                                 <a class="nav-link text-muted" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-muted" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link text-muted" asp-area="" asp-controller="Tournaments" asp-action="List">Tournaments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-muted" asp-area="" asp-controller="Teams" asp-action="List">Teams</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-muted" asp-area="" asp-controller="Players" asp-action="List">Players</a>
                             </li>
                         </ul>
                     </div>

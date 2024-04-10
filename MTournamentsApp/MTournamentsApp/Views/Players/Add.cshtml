@@ -1,0 +1,53 @@
+﻿@model PlayerViewModel
+
+@{
+    ViewData["Title"] = "Adding Player";
+}
+
+<p class="h1 mt-5 mb-3 text-center">Add a new player</p>
+
+<form class="row gx-4 align-items-center justify-content-center" asp-controller="Players" asp-action="Add" method="post" enctype="application/x-www-form-urlencoded">
+    <div class="text-danger col-10 mx-auto" asp-validation-summary="All"></div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto">
+        <label asp-for="Player.FirstName">First Name</label>
+        <input type="text" asp-for="Player.FirstName" class="form-control" />
+    </div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto">
+        <label asp-for="Player.LastName">Last Name</label>
+        <input type="text" asp-for="Player.LastName" class="form-control" />
+    </div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto mt-3">
+        <label asp-for="Player.DateOfBirth">Date of Birth</label>
+        <input type="date" max="@DateTime.Today.ToString("yyyy-MM-dd")" min="@DateTime.Today.AddYears(-200).ToString("yyyy-MM-dd")" asp-for="Player.DateOfBirth" class="form-control" />
+    </div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto mt-3">
+        <label asp-for="Player.TeamId">Player Team</label>
+        <select asp-for="Player.TeamId" class="form-control">
+            <option value="">Please select player's team'</option>
+            @foreach (Team t in Model.TeamsList)
+            {
+                <option value="@t.TeamId">@t.TeamName</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto mt-3">
+        <label asp-for="Player.PlayerRoleId">Player Team</label>
+        <select asp-for="Player.PlayerRoleId" class="form-control">
+            <option value="">Please select player's role'</option>
+            @foreach (PlayerRole p in Model.RolesList)
+            {
+                <option value="@p.PlayerRoleId">@p.PlayerRoleName</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group col-10 mx-auto mt-4 text-center">
+        <button type="submit" class="btn btn-primary me-3">Add</button>
+        <a asp-controller="Players" asp-action="List" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
