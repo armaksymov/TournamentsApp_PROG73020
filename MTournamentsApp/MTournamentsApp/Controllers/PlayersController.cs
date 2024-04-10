@@ -61,5 +61,44 @@ namespace MTournamentsApp.Controllers
                 return View(new PlayerViewModel() { Player = new Player(), RolesList = playerRoles, TeamsList = teams });
             }
         }
+
+        [HttpGet()]
+        public IActionResult Delete(int id) 
+        {
+            var player = _tournamentsDbContext.Players.Include(p => p.Role).Include(p => p.Team).Where(p => p.Id == id).FirstOrDefault();
+            if (player != null)
+            {
+                return View(player);
+            }
+            else
+            {
+                return RedirectToAction("List", "Players");
+            }
+        }
+
+        [HttpPost()]
+        public IActionResult Delete(Player p)
+        {
+            _tournamentsDbContext.Players.Remove(p);
+
+            Team? team = _tournamentsDbContext.Teams.Include(t => t.Players).Where(t => t.TeamId == p.TeamId).FirstOrDefault();
+
+            if (team != null)
+            {
+                team.PlayerIds?.Remove(p.Id);
+                foreach (Player player in team.Players)
+                {
+                    if(player.Id == p.Id)
+                    {
+                        team.Players.Remove(player);
+                    }
+                }
+                _tournamentsDbContext.Teams.Update(team);
+            }
+
+            _tournamentsDbContext.SaveChanges();
+
+            return RedirectToAction("List", "Players");
+        }
     }
 }
