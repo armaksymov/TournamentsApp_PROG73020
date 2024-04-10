@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-string? connectionString = builder.Configuration.GetConnectionString("TournamentsDB");
+string? connectionString = builder.Configuration.GetConnectionString("DockerDB");
 builder.Services.AddDbContext<TournamentsDbContext>(opt => opt.UseSqlServer(connectionString));
 
 var app = builder.Build();
