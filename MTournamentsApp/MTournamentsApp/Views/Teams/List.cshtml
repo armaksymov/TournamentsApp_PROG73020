@@ -1,0 +1,34 @@
+﻿@model List<Team>
+
+@{
+    ViewData["Title"] = "Teams List";
+}
+
+<p class="h1 mb-3">Teams List</p>
+<a class="btn btn-primary mb-3" asp-controller="Teams" asp-action="Add">Add New Team</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Team Name</th>
+            <th>Team Description</th>
+            <th>Game</th>
+            <th># of Passed Tournaments</th>
+            <th># of Players</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Team t in Model)
+        {
+            <tr>
+                <td>@t.TeamName</td>
+                <td>@t.TeamDescription</td>
+                <td>@t.MainTeamGame?.GameName</td>
+                <td>@t.Tournaments?.Count()</td>
+                <td>@t.Players?.Count()</td>
+                <td class="text-center"><a asp-controller="Teams" asp-action="Manage" asp-route-id="@t.TeamId">Manage</a><span class="mx-3">|</span><a asp-controller="Teams" asp-action="Edit" asp-route-id="@t.TeamId">Edit</a><span class="mx-3">|</span><a asp-controller="Teams" asp-action="Delete" asp-route-id="@t.TeamId">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
