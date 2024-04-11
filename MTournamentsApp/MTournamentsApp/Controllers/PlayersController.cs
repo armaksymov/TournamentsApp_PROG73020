@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MTournamentsApp.Entities;
 using MTournamentsApp.Models;
 
@@ -43,6 +44,14 @@ namespace MTournamentsApp.Controllers
 
                 if (team != null)
                 {
+                    if(team.PlayerIds.IsNullOrEmpty())
+                    {
+                        team.PlayerIds = new List<int>();
+                    }
+                    if(team.Players.IsNullOrEmpty())
+                    {
+                        team.Players = new List<Player>();
+                    }
                     team.PlayerIds.Add(p.Player.Id);
                     team.Players.Add(p.Player);
                 }
