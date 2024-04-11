@@ -1,0 +1,55 @@
+﻿@model PlayerViewModel
+
+@{
+    ViewData["Title"] = "Editing Player";
+}
+
+<p class="h1 mt-5 mb-3 text-center">Edit player</p>
+
+<form class="row gx-4 align-items-center justify-content-center" asp-controller="Players" asp-action="Edit" method="post" enctype="application/x-www-form-urlencoded">
+    <div class="text-danger col-10 mx-auto" asp-validation-summary="All"></div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto">
+        <label asp-for="@Model.Player.FirstName">First Name</label>
+        <input type="text" asp-for="@Model.Player.FirstName" class="form-control" />
+    </div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto">
+        <label asp-for="@Model.Player.LastName">Last Name</label>
+        <input type="text" asp-for="@Model.Player.LastName" class="form-control" />
+    </div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto mt-3">
+        <label asp-for="@Model.Player.DateOfBirth">Date of Birth</label>
+        <input type="date" max="@DateTime.Today.ToString("yyyy-MM-dd")" min="@DateTime.Today.AddYears(-200).ToString("yyyy-MM-dd")" asp-for="@Model.Player.DateOfBirth" class="form-control" />
+    </div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto mt-3">
+        <label asp-for="@Model.Player.TeamId">Player Team</label>
+        <select asp-for="@Model.Player.TeamId" class="form-control">
+            <option value="">Please select player's team'</option>
+            @foreach (Team t in Model.TeamsList)
+            {
+                <option value="@t.TeamId">@t.TeamName</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto mt-3">
+        <label asp-for="@Model.Player.PlayerRoleId">Player Team</label>
+        <select asp-for="@Model.Player.PlayerRoleId" class="form-control">
+            <option value="">Please select player's role'</option>
+            @foreach (PlayerRole p in Model.RolesList)
+            {
+                <option value="@p.PlayerRoleId">@p.PlayerRoleName</option>
+            }
+        </select>
+    </div>
+
+    <input type="hidden" asp-for="@Model.Player.Id" />
+
+    <div class="form-group col-10 mx-auto mt-4 text-center">
+        <button type="submit" class="btn btn-primary me-3">Update</button>
+        <a asp-controller="Players" asp-action="List" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>

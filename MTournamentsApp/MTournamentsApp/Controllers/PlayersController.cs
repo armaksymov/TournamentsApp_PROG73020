@@ -63,6 +63,38 @@ namespace MTournamentsApp.Controllers
         }
 
         [HttpGet()]
+        public IActionResult Edit(int id)
+        {
+            List<PlayerRole> playerRoles = _tournamentsDbContext.PlayerRoles.OrderBy(pr => pr.PlayerRoleName).ToList();
+            List<Team> teams = _tournamentsDbContext.Teams.OrderBy(t => t.TeamName).ToList();
+            Player? player = _tournamentsDbContext.Players.Include(p => p.Team).Include(p => p.Role).Where(p => p.Id == id).FirstOrDefault();
+
+            if (player != null) {
+                return View(new PlayerViewModel() { Player = player, RolesList = playerRoles, TeamsList = teams });
+            }
+            else
+            {
+                return RedirectToAction("List", "Players");
+            }
+        }
+
+        [HttpPost()]
+        public IActionResult Edit(PlayerViewModel p)
+        {
+            if (ModelState.IsValid)
+            {
+                _tournamentsDbContext.Players.Update(p.Player);
+                _tournamentsDbContext.SaveChanges();
+
+                return RedirectToAction("List", "Players");
+            }
+            else
+            {
+                return View(p);
+            }
+        }
+
+        [HttpGet()]
         public IActionResult Delete(int id) 
         {
             var player = _tournamentsDbContext.Players.Include(p => p.Role).Include(p => p.Team).Where(p => p.Id == id).FirstOrDefault();
