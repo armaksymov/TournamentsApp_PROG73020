@@ -4,7 +4,9 @@
     ViewData["Title"] = "Editing Player";
 }
 
-<p class="h1 mt-5 mb-3 text-center">Edit player</p>
+<a class="text-muted mt-3 mb-0 btn btn-lg" asp-asp-controller="Players" asp-action="List"><- Back</a>
+
+<p class="h1 mb-4 text-center">Edit player</p>
 
 <form class="row gx-4 align-items-center justify-content-center" asp-controller="Players" asp-action="Edit" method="post" enctype="application/x-www-form-urlencoded">
     <div class="text-danger col-10 mx-auto" asp-validation-summary="All"></div>
