@@ -30,5 +30,31 @@ namespace MTournamentsApp.Controllers
 
             return teams;
         }
+
+        [HttpGet()]
+        public IActionResult Delete(string id)
+        {
+            var team = _tournamentsDbContext.Teams.Include(t => t.MainTeamGame).Where(t => t.TeamId == id).FirstOrDefault();
+            team.Players = _tournamentsDbContext.Players.Where(p => p.TeamId == team.TeamId).OrderBy(p => p.Id).ToList();
+            team.Tournaments = _tournamentsDbContext.Tournaments.Where(t => t.TeamIds!.Contains(team.TeamId!)).ToList();
+
+            if (team != null)
+            {
+                return View(team);
+            }
+            else
+            {
+                return RedirectToAction("List", "Teams");
+            }
+        }
+
+        [HttpPost()]
+        public IActionResult Delete(Team t)
+        {
+            _tournamentsDbContext.Teams.Remove(t);
+            _tournamentsDbContext.SaveChanges();
+
+            return RedirectToAction("List", "Teams");
+        }
     }
 }
