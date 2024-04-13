@@ -26,7 +26,7 @@
                 <td>@t.TeamDescription</td>
                 <td>@t.MainTeamGame?.GameName</td>
                 <td>@t.Tournaments?.Count()</td>
-                <td>@t.Players?.Count()</td>
+                <td><a asp-controller="Teams" asp-action="Players" asp-route-id="@t.TeamId">@t.Players?.Count()</a></td>
                 <td class="text-center"><a asp-controller="Teams" asp-action="Manage" asp-route-id="@t.TeamId">Manage</a><span class="mx-3">|</span><a asp-controller="Teams" asp-action="Edit" asp-route-id="@t.TeamId">Edit</a><span class="mx-3">|</span><a asp-controller="Teams" asp-action="Delete" asp-route-id="@t.TeamId">Delete</a></td>
             </tr>
         }

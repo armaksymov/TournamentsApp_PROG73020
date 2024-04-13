@@ -4,7 +4,7 @@
     ViewData["Title"] = "Editing Player";
 }
 
-<a class="text-muted mt-3 mb-0 btn btn-lg" asp-asp-controller="Players" asp-action="List"><- Back</a>
+<a class="text-muted mt-3 mb-0 btn btn-lg" onclick="javascript:window.history.back();"><- Back</a>
 
 <p class="h1 mb-4 text-center">Edit player</p>
 
@@ -52,6 +52,6 @@
 
     <div class="form-group col-10 mx-auto mt-4 text-center">
         <button type="submit" class="btn btn-primary me-3">Update</button>
-        <a asp-controller="Players" asp-action="List" class="btn btn-secondary">Cancel</a>
+        <a onclick="javascript:window.history.back();" class="btn btn-secondary">Cancel</a>
     </div>
 </form>

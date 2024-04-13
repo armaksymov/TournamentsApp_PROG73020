@@ -1,0 +1,32 @@
+﻿@model List<Player>
+
+@{
+    ViewData["Title"] = Model.First().Team?.TeamName + " Players";
+}
+
+<a class="text-muted mb-1 btn btn-lg" onclick="javascript:window.history.back();"><- Back</a>
+<p class="h1 mb-3">Players List for @Model.First().Team?.TeamName</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Role</th>
+            <th>Team Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Player p in Model)
+        {
+            <tr>
+                <td>@p.FirstName @p.LastName</td>
+                <td>@p.Age</td>
+                <td>@p.Role?.PlayerRoleName</td>
+                <td>@p.Team?.TeamName</td>
+                <td class="text-center"><a asp-controller="Players" asp-action="Manage" asp-route-id="@p.Id">Manage</a><span class="mx-3">|</span><a asp-controller="Players" asp-action="Edit" asp-route-id="@p.Id">Edit</a><span class="mx-3">|</span><a asp-controller="Players" asp-action="Delete" asp-route-id="@p.Id">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Delete Team";
 }
-<a class="text-muted mt-3 mb-0 btn btn-lg" asp-asp-controller="Teams" asp-action="List"><- Back</a>
+<a class="text-muted mt-3 mb-0 btn btn-lg" onclick="javascript:window.history.back();"><- Back</a>
 
 <p class="h1 mb-4 text-center">Deleting an existing team</p>
 
@@ -15,7 +15,7 @@
 
     <div class="form-group col-10 mt-5">
         <button type="submit" class="btn btn-primary me-3">Delete</button>
-        <a asp-controller="Teams" asp-action="List" class="btn btn-secondary">Cancel</a>
+        <a onclick="javascript:window.history.back();" class="btn btn-secondary">Cancel</a>
         <p class="h6 text-danger fw-bold mt-1">Please note that deleting the team will delete all the players too.</p>
         <p class="h6 text-danger">If you only want to delete a team, please remove players from this team first.</p>
     </div>

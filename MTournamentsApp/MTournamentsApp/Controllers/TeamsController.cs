@@ -56,5 +56,20 @@ namespace MTournamentsApp.Controllers
 
             return RedirectToAction("List", "Teams");
         }
+
+        [HttpGet()]
+        public IActionResult Players(string id)
+        {
+            List<Player> players = _tournamentsDbContext.Players.Include(p => p.Role).Include(p => p.Team).Where(p => p.TeamId == id).OrderBy(p => p.Id).ToList();
+
+            if (players != null)
+            {
+                return View(players);
+            }
+            else
+            {
+                return RedirectToAction("List", "Teams");
+            }
+        }
     }
 }
