@@ -1,11 +1,11 @@
 ﻿@model List<Player>
 
 @{
-    ViewData["Title"] = "Players List";
+    ViewData["Title"] = "Members List";
 }
 
-<p class="h1 mb-3">Players List</p>
-<a class="btn btn-primary mb-3" asp-controller="Players" asp-action="Add">Add New Player</a>
+<p class="h1 mb-3">Members List</p>
+<a class="btn btn-primary mb-3" asp-controller="Members" asp-action="Add">Add New Member</a>
 
 <table class="table table-bordered table-striped">
     <thead>
@@ -14,6 +14,7 @@
             <th>Age</th>
             <th>Role</th>
             <th>Team Name</th>
+            <th>Email</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -25,7 +26,8 @@
                 <td>@p.Age</td>
                 <td>@p.Role?.PlayerRoleName</td>
                 <td>@p.Team?.TeamName</td>
-                <td class="text-center"><a asp-controller="Players" asp-action="Manage" asp-route-id="@p.Id">Manage</a><span class="mx-3">|</span><a asp-controller="Players" asp-action="Edit" asp-route-id="@p.Id">Edit</a><span class="mx-3">|</span><a asp-controller="Players" asp-action="Delete" asp-route-id="@p.Id">Delete</a></td>
+                <td>@p.Email</td>
+                <td class="text-center"><a asp-controller="Members" asp-action="Edit" asp-route-id="@p.Id">Edit</a><span class="mx-3">|</span><a asp-controller="Members" asp-action="Delete" asp-route-id="@p.Id">Delete</a></td>
             </tr>
         }
     </tbody>

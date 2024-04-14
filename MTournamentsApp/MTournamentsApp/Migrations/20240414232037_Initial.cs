@@ -110,6 +110,7 @@ namespace MTournamentsApp.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PlayerRoleId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     TeamId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
@@ -125,8 +126,7 @@ namespace MTournamentsApp.Migrations
                         name: "FK_Players_Teams_TeamId",
                         column: x => x.TeamId,
                         principalTable: "Teams",
-                        principalColumn: "TeamId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "TeamId");
                 });
 
             migrationBuilder.CreateTable(
@@ -149,6 +149,28 @@ namespace MTournamentsApp.Migrations
                         name: "FK_TeamTournament_Tournaments_TournamentsId",
                         column: x => x.TournamentsId,
                         principalTable: "Tournaments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Invations",
+                columns: table => new
+                {
+                    InvitationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PlayerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PlayerEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    PlayerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invations", x => x.InvitationId);
+                    table.ForeignKey(
+                        name: "FK_Invations_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Players",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -189,12 +211,17 @@ namespace MTournamentsApp.Migrations
 
             migrationBuilder.InsertData(
                 table: "Players",
-                columns: new[] { "Id", "DateOfBirth", "FirstName", "LastName", "PlayerRoleId", "TeamId" },
+                columns: new[] { "Id", "DateOfBirth", "Email", "FirstName", "LastName", "PlayerRoleId", "TeamId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Test", "User #1", "C", "ConCE" },
-                    { 2, new DateTime(2002, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Test", "User #2", "P", "ConCE" }
+                    { 1, new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "Test", "User #1", "C", "ConCE" },
+                    { 2, new DateTime(2002, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "Test", "User #2", "P", "ConCE" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invations_PlayerId",
+                table: "Invations",
+                column: "PlayerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Players_PlayerRoleId",
@@ -231,19 +258,22 @@ namespace MTournamentsApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Players");
+                name: "Invations");
 
             migrationBuilder.DropTable(
                 name: "TeamTournament");
+
+            migrationBuilder.DropTable(
+                name: "Players");
+
+            migrationBuilder.DropTable(
+                name: "Tournaments");
 
             migrationBuilder.DropTable(
                 name: "PlayerRoles");
 
             migrationBuilder.DropTable(
                 name: "Teams");
-
-            migrationBuilder.DropTable(
-                name: "Tournaments");
 
             migrationBuilder.DropTable(
                 name: "Addresses");

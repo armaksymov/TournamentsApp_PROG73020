@@ -6,20 +6,20 @@ using MTournamentsApp.Models;
 
 namespace MTournamentsApp.Controllers
 {
-    public class PlayersController : Controller
+    public class MembersController : Controller
     {
         private TournamentsDbContext _tournamentsDbContext;
 
-        public PlayersController(TournamentsDbContext tournamentsDbContext)
+        public MembersController(TournamentsDbContext tournamentsDbContext)
         {
             _tournamentsDbContext = tournamentsDbContext;
         }
 
         public IActionResult List()
         {
-            return View(GetPlayers());
+            return View(GetMembers());
         }
-        private List<Player> GetPlayers()
+        private List<Player> GetMembers()
         {
             List<Player> players = _tournamentsDbContext.Players.Include(p => p.Role).Include(p => p.Team).ToList();
             return players;
@@ -44,11 +44,11 @@ namespace MTournamentsApp.Controllers
 
                 if (team != null)
                 {
-                    if(team.PlayerIds.IsNullOrEmpty())
+                    if (team.PlayerIds.IsNullOrEmpty())
                     {
                         team.PlayerIds = new List<int>();
                     }
-                    if(team.Players.IsNullOrEmpty())
+                    if (team.Players.IsNullOrEmpty())
                     {
                         team.Players = new List<Player>();
                     }
@@ -56,11 +56,12 @@ namespace MTournamentsApp.Controllers
                     team.Players.Add(p.Player);
                 }
 
-                _tournamentsDbContext.Teams.Update(team);//Where(t => t.TeamId == p.Player.TeamId);
+                if (team != null)
+                    _tournamentsDbContext.Teams.Update(team);//Where(t => t.TeamId == p.Player.TeamId);
 
                 _tournamentsDbContext.SaveChanges();
 
-                return RedirectToAction("List", "Players");
+                return RedirectToAction("List", "Members");
             }
             else
             {
@@ -78,12 +79,13 @@ namespace MTournamentsApp.Controllers
             List<Team> teams = _tournamentsDbContext.Teams.OrderBy(t => t.TeamName).ToList();
             Player? player = _tournamentsDbContext.Players.Include(p => p.Team).Include(p => p.Role).Where(p => p.Id == id).FirstOrDefault();
 
-            if (player != null) {
+            if (player != null)
+            {
                 return View(new PlayerViewModel() { Player = player, RolesList = playerRoles, TeamsList = teams });
             }
             else
             {
-                return RedirectToAction("List", "Players");
+                return RedirectToAction("List", "Members");
             }
         }
 
@@ -95,16 +97,18 @@ namespace MTournamentsApp.Controllers
                 _tournamentsDbContext.Players.Update(p.Player);
                 _tournamentsDbContext.SaveChanges();
 
-                return RedirectToAction("List", "Players");
+                return RedirectToAction("List", "Members");
             }
             else
             {
+                p.TeamsList = _tournamentsDbContext.Teams.ToList();
+                p.RolesList = _tournamentsDbContext.PlayerRoles.ToList();
                 return View(p);
             }
         }
 
         [HttpGet()]
-        public IActionResult Delete(int id) 
+        public IActionResult Delete(int id)
         {
             var player = _tournamentsDbContext.Players.Include(p => p.Role).Include(p => p.Team).Where(p => p.Id == id).FirstOrDefault();
             if (player != null)
@@ -113,7 +117,7 @@ namespace MTournamentsApp.Controllers
             }
             else
             {
-                return RedirectToAction("List", "Players");
+                return RedirectToAction("List", "Members");
             }
         }
 
@@ -129,7 +133,7 @@ namespace MTournamentsApp.Controllers
                 team.PlayerIds?.Remove(p.Id);
                 foreach (Player player in team.Players)
                 {
-                    if(player.Id == p.Id)
+                    if (player.Id == p.Id)
                     {
                         team.Players.Remove(player);
                     }
@@ -139,7 +143,7 @@ namespace MTournamentsApp.Controllers
 
             _tournamentsDbContext.SaveChanges();
 
-            return RedirectToAction("List", "Players");
+            return RedirectToAction("List", "Members");
         }
     }
 }

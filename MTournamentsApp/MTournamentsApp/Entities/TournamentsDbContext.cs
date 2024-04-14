@@ -43,13 +43,14 @@ namespace MTournamentsApp.Entities
             modelBuilder.Entity<Team>()
                 .HasMany(t => t.Players)
                 .WithOne(p => p.Team)
-                .HasForeignKey(p => p.TeamId)
-                .OnDelete(DeleteBehavior.Cascade); // Delete Players when a Team is deleted
+                .HasForeignKey(p => p.TeamId);
 
             modelBuilder.Entity<Invitation>()
                 .HasOne(i => i.Player)
-                .WithMany()
-                .HasForeignKey(i => i.InvitationId);
+                .WithMany(p => p.Invitations)
+                .HasForeignKey(i => i.PlayerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
             modelBuilder.Entity<Game>().HasData(
                 new Game() { GameId = "val", GameName = "Valorant" },

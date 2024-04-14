@@ -46,6 +46,6 @@ namespace MTournamentsApp.Entities
         public string? TeamId { get; set;}
         public Team? Team { get; set; }
 
-        public List<Invitation>? Invitations { get; set; }
+        public List<Invitation>? Invitations { get; set; } = null;
     }
 }

@@ -1,0 +1,39 @@
+﻿@model Player
+
+@{
+    ViewData["Title"] = "Delete Member";
+}
+
+<a class="text-muted mt-3 mb-0 btn btn-lg" onclick="javascript:window.history.back();"><- Back</a>
+
+<p class="h1 mb-4 text-center">Deleting an existing member</p>
+
+<form class="row gx-4" asp-controller="Members" asp-action="Delete" method="post" enctype="application/x-www-form-urlencoded">
+    <h3 class="col-10">Confirm Member Deletion</h3>
+    <p class="col-10 mt-1">
+        Are you sure you want to delete the member "<strong>@Model.FirstName @Model.LastName</strong>" (Age: @Model.Age),
+        @if (Model.Team?.TeamName != null && Model.Role?.PlayerRoleName != null)
+        {
+            <text>who is currently associated with the team "<strong>@Model.Team?.TeamName</strong>" as a "<strong>@Model.Role?.PlayerRoleName</strong>".</text>
+        }
+        else if (Model.Team?.TeamName != null)
+        {
+            <text>who is currently associated with the team "<strong>@Model.Team?.TeamName</strong>".</text>
+        }
+        else if (Model.Role?.PlayerRoleName != null)
+        {
+            <text>who is currently associated as a "<strong>@Model.Role?.PlayerRoleName</strong>".</text>
+        }
+        else
+        {
+            <text>who is currently not associated with any team or specific role.</text>
+        }
+    </p>
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group col-10 mt-4">
+        <button type="submit" class="btn btn-primary me-3">Delete</button>
+        <a asp-controller="Members" asp-action="List" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>

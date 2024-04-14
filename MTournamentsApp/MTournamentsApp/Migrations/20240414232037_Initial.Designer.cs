@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MTournamentsApp.Migrations
 {
     [DbContext(typeof(TournamentsDbContext))]
-    [Migration("20240414225633_InvitationsPatch")]
-    partial class InvitationsPatch
+    [Migration("20240414232037_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,7 +92,10 @@ namespace MTournamentsApp.Migrations
             modelBuilder.Entity("MTournamentsApp.Entities.Invitation", b =>
                 {
                     b.Property<int>("InvitationId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvitationId"));
 
                     b.Property<string>("PlayerEmail")
                         .IsRequired()
@@ -306,12 +309,6 @@ namespace MTournamentsApp.Migrations
             modelBuilder.Entity("MTournamentsApp.Entities.Invitation", b =>
                 {
                     b.HasOne("MTournamentsApp.Entities.Player", "Player")
-                        .WithMany()
-                        .HasForeignKey("InvitationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MTournamentsApp.Entities.Player", null)
                         .WithMany("Invitations")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -328,8 +325,7 @@ namespace MTournamentsApp.Migrations
 
                     b.HasOne("MTournamentsApp.Entities.Team", "Team")
                         .WithMany("Players")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TeamId");
 
                     b.Navigation("Role");
 
