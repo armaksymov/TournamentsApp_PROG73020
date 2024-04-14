@@ -6,7 +6,7 @@ namespace MTournamentsApp.Services
 {
     public class Mail(IHttpContextAccessor httpContextAccessor) : IMail
     {
-        public bool SendInvite(Tournament tournament, Player player)
+        public bool SendInvite(Tournament tournament, Invitation recipient)
         {
             try
             {
@@ -23,31 +23,19 @@ namespace MTournamentsApp.Services
                 };
 
                 var invitationUrl =
-                    $"{httpContextAccessor.HttpContext?.Request.Scheme}://{httpContextAccessor.HttpContext?.Request.Host.ToUriComponent()}/tournament/{tournament.Id}/invitations/{player.Id}";
+                    $"{httpContextAccessor.HttpContext?.Request.Scheme}://{httpContextAccessor.HttpContext?.Request.Host.ToUriComponent()}/tournament/{tournament.Id}/invitations/{recipient.InvitationId}";
 
                 // Create mail message
                 var mailMessage = new MailMessage
                 {
                     From = new MailAddress(fromAddress),
                     Subject = $"You have been invited to the \"{tournament.TournamentName}\" tournament!",
-                    Body = $"" +
-                    $"<h1>Hello {player.FirstName}:</h1>" +
-                    $"<p>You have been invited to the \"{tournament.TournamentName}\" for {tournament.TournamentGame} on {tournament.TournamentDate}!</p>" +
-                    $"<p>We would be thrilled to have you so please <a href=\"{invitationUrl}\">let us know</a> if you can as soon as possible!</p>" +
-                           $"<p>Sincerely,</p>" +
-                           $"<p>MTournamentZ</p>",
+                    Body = $"",
                     IsBodyHtml = true
                 };
 
-                if (player.Email != null)
-                {
-                    mailMessage.To.Add(player.Email);
-                    smtpClient.Send(mailMessage);
-                }
-                else
-                {
-                    return false;
-                }
+                mailMessage.To.Add(recipient.PlayerEmail);
+                smtpClient.Send(mailMessage);
 
                 return true;
             }

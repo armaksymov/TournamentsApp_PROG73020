@@ -4,6 +4,6 @@ namespace MTournamentsApp.Services
 {
     public interface IMail
     {
-        bool SendInvite(Tournament tournament, Player player);
+        bool SendInvite(Tournament tournament, Invitation recipient);
     }
 }
