@@ -12,6 +12,7 @@ namespace MTournamentsApp.Entities
         public DbSet<PlayerRole> PlayerRoles { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<Tournament> Tournaments { get; set; }
+        public DbSet<Invitation> Invations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +46,11 @@ namespace MTournamentsApp.Entities
                 .HasForeignKey(p => p.TeamId)
                 .OnDelete(DeleteBehavior.Cascade); // Delete Players when a Team is deleted
 
+            modelBuilder.Entity<Invitation>()
+                .HasOne(i => i.Player)
+                .WithMany()
+                .HasForeignKey(i => i.InvitationId);
+
             modelBuilder.Entity<Game>().HasData(
                 new Game() { GameId = "val", GameName = "Valorant" },
                 new Game() { GameId = "halInf", GameName = "Halo Infinite" }
@@ -61,8 +67,8 @@ namespace MTournamentsApp.Entities
             );
 
             modelBuilder.Entity<Player>().HasData(
-                new Player() { Id = 1, FirstName = "Test", LastName = "User #1", DateOfBirth = DateTime.Parse("01-01-2000"), PlayerRoleId = "C", TeamId = "ConCE" },
-                new Player() { Id = 2, FirstName = "Test", LastName = "User #2", DateOfBirth = DateTime.Parse("01-01-2002"), PlayerRoleId = "P", TeamId = "ConCE" }
+                new Player() { Id = 1, FirstName = "Test", LastName = "User #1", Email = "", DateOfBirth = DateTime.Parse("01-01-2000"), PlayerRoleId = "C", TeamId = "ConCE" },
+                new Player() { Id = 2, FirstName = "Test", LastName = "User #2", Email = "", DateOfBirth = DateTime.Parse("01-01-2002"), PlayerRoleId = "P", TeamId = "ConCE" }
             );
 
             modelBuilder.Entity<Team>().HasData(

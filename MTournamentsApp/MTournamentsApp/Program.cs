@@ -1,10 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using MTournamentsApp.Entities;
+using MTournamentsApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddSingleton<IMail, Mail>();
 
 string? connectionString = builder.Configuration.GetConnectionString("DockerDB");
 builder.Services.AddDbContext<TournamentsDbContext>(opt => opt.UseSqlServer(connectionString));

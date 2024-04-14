@@ -19,6 +19,11 @@ namespace MTournamentsApp.Entities
         [BirthDateValidation]
         public DateTime DateOfBirth { get; set; }
 
+        [Required(ErrorMessage = "Please provide the player's email address")]
+        [RegularExpression(@"^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?$",
+        ErrorMessage = "Please enter a valid email address")]
+        public string? Email { get; set; }
+
         public int? Age
         {
             get
@@ -40,5 +45,7 @@ namespace MTournamentsApp.Entities
 
         public string? TeamId { get; set;}
         public Team? Team { get; set; }
+
+        public List<Invitation>? Invitations { get; set; }
     }
 }
