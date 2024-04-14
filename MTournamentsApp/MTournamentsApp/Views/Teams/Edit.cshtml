@@ -1,0 +1,46 @@
+﻿@model TeamViewModel
+
+@{
+    ViewData["Title"] = "Editing Team";
+    var teamName = Model?.Team?.TeamName;
+    if (teamName != null)
+    {
+        ViewData["Title"] = "Editing " + teamName;
+    }
+}
+
+<a class="text-muted mt-3 mb-0 btn btn-lg" onclick="javascript:window.history.back();"><- Back</a>
+
+<p class="h1 mb-4 text-center">Edit team</p>
+
+<form class="row gx-4 align-items-center justify-content-center" asp-controller="Teams" asp-action="Edit" method="post" enctype="application/x-www-form-urlencoded">
+    <div class="text-danger col-10 mx-auto" asp-validation-summary="All"></div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto">
+        <label asp-for="Team.TeamName">Team Name</label>
+        <input type="text" asp-for="Team.TeamName" class="form-control" />
+    </div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto">
+        <label asp-for="Team.TeamDescription">Team Description</label>
+        <input type="text" asp-for="Team.TeamDescription" class="form-control" />
+    </div>
+
+    <div class="form-group col-10 col-lg-5 mx-auto mt-3">
+        <label asp-for="@Model.Team.MainTeamGameId">Team Game</label>
+        <select asp-for="@Model.Team.MainTeamGameId" class="form-control">
+            <option value="">Please select the team's game</option>
+            @foreach (Game g in Model.GamesList)
+            {
+                <option value="@g.GameId">@g.GameName</option>
+            }
+        </select>
+    </div>
+
+    <input type="hidden" asp-for="@Model.Team.TeamId" />
+
+    <div class="form-group col-10 mx-auto mt-4 text-center">
+        <button type="submit" class="btn btn-primary me-3">Edit</button>
+        <a asp-controller="Teams" asp-action="List" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>

@@ -94,6 +94,49 @@ namespace MTournamentsApp.Controllers
         }
 
         [HttpGet()]
+        public IActionResult Edit(string id)
+        {
+            var games = _tournamentsDbContext.Games.OrderBy(g => g.GameName).ToList();
+            var players = _tournamentsDbContext.Players.OrderBy(p => p.FirstName).ToList();
+            var team = _tournamentsDbContext.Teams
+                        .Include(t => t.Players)
+                        .Include(t => t.Tournaments)
+                        .FirstOrDefault(t => t.TeamId == id);
+
+            if (team == null)
+            {
+                return RedirectToAction("List", "Teams");
+            }
+
+            var viewModel = new TeamViewModel()
+            {
+                GamesList = games,
+                PlayersList = players,
+                Team = team
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost()]
+        public IActionResult Edit(TeamViewModel t)
+        {
+            if (ModelState.IsValid)
+            {
+                _tournamentsDbContext.Teams.Update(t.Team);
+                _tournamentsDbContext.SaveChanges();
+
+                return RedirectToAction("List", "Teams");
+            }
+            else
+            {
+                t.PlayersList = _tournamentsDbContext.Players.ToList();
+                t.GamesList = _tournamentsDbContext.Games.ToList();
+                return View(t);
+            }
+        }
+
+        [HttpGet()]
         public IActionResult Delete(string id)
         {
             var team = _tournamentsDbContext.Teams.Include(t => t.MainTeamGame).Where(t => t.TeamId == id).FirstOrDefault();
