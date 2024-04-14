@@ -8,15 +8,13 @@
 <p class="h1 mb-4 text-center">Deleting an existing team</p>
 
 <form class="row gx-4" asp-controller="Teams" asp-action="Delete" method="post" enctype="application/x-www-form-urlencoded">
-    <p class="h3 col-10">Are you sure you want to delete this team?</p>
-    <p class="h3 col-10 mt-1 fw-bold">@Model.TeamName with @Model.Players?.Count players</p>
+    <h3 class="col-10">Confirm Deletion</h3>
+    <p class="col-10 mt-1">Are you sure you want to delete the team "<strong>@Model.TeamName</strong>" which currently has <strong>@Model.Players?.Count</strong> members?</p>
 
     <input type="hidden" asp-for="TeamId" />
 
     <div class="form-group col-10 mt-5">
         <button type="submit" class="btn btn-primary me-3">Delete</button>
         <a onclick="javascript:window.history.back();" class="btn btn-secondary">Cancel</a>
-        <p class="h6 text-danger fw-bold mt-1">Please note that deleting the team will delete all the players too.</p>
-        <p class="h6 text-danger">If you only want to delete a team, please remove players from this team first.</p>
     </div>
 </form>

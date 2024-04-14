@@ -1,0 +1,47 @@
+﻿@model List<Player>
+
+@{
+    ViewData["Title"] = "Team Members";
+    var teamName = Model.FirstOrDefault()?.Team?.TeamName;
+    if (teamName != null)
+    {
+        ViewData["Title"] = teamName + " Members";
+    }
+}
+
+<a class="text-muted mb-1 btn btn-lg" onclick="javascript:window.history.back();"><- Back</a>
+
+@if (Model.Count == 0 || Model.First().Team == null)
+{
+    <h3 class="col-10">No Members Found</h3>
+}
+else
+{
+    <p class="h1 mb-3">Members List for @teamName</p>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Role</th>
+                <th>Team Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Player p in Model)
+            {
+                <tr>
+                    <td>@p.FirstName @p.LastName</td>
+                    <td>@p.Age</td>
+                    <td>@p.Role?.PlayerRoleName</td>
+                    <td>@p.Team?.TeamName</td>
+                    <td class="text-center">
+                        <a asp-controller="Members" asp-action="Edit" asp-route-id="@p.Id">Edit</a><span class="mx-3">|</span>
+                        <a asp-controller="Members" asp-action="Kick" asp-route-playerId="@p.Id" asp-route-teamId="@p.TeamId">Kick</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

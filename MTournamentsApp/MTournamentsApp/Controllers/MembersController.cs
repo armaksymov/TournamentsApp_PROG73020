@@ -108,6 +108,17 @@ namespace MTournamentsApp.Controllers
         }
 
         [HttpGet()]
+        public IActionResult Kick(int playerId, string teamId)
+        {
+            Player player = _tournamentsDbContext.Players.Find(playerId);
+            player.TeamId = null;
+
+            _tournamentsDbContext.SaveChanges();
+
+            return RedirectToAction("Members", "Teams", new { id = teamId });
+        }
+
+        [HttpGet()]
         public IActionResult Delete(int id)
         {
             var player = _tournamentsDbContext.Players.Include(p => p.Role).Include(p => p.Team).Where(p => p.Id == id).FirstOrDefault();

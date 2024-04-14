@@ -120,7 +120,7 @@ namespace MTournamentsApp.Controllers
         }
 
         [HttpGet()]
-        public IActionResult Players(string id)
+        public IActionResult Members(string id)
         {
             List<Player> players = _tournamentsDbContext.Players.Include(p => p.Role).Include(p => p.Team).Where(p => p.TeamId == id).OrderBy(p => p.Id).ToList();
 
