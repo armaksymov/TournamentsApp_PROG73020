@@ -1,0 +1,59 @@
+﻿@model TeamViewModel
+
+@{
+    ViewData["Title"] = "Adding Team";
+}
+
+<a class="text-muted mt-3 mb-0 btn btn-lg" onclick="javascript:window.history.back();">← Back</a>
+<p class="h1 mb-3 text-center">Add a new team</p>
+
+<form class="row gx-4 align-items-center justify-content-center" asp-controller="Teams" asp-action="Add" method="post" enctype="application/x-www-form-urlencoded">
+    <div class="text-danger col-10 mx-auto" asp-validation-summary="All"></div>
+
+    <div class="form-group col-10 col-lg-4 mx-auto">
+        <label asp-for="@Model.Team.TeamName">Team Name</label>
+        <input type="text" asp-for="@Model.Team.TeamName" class="form-control" />
+    </div>
+
+    <div class="form-group col-10 col-lg-4 mx-auto">
+        <label asp-for="@Model.Team.MainTeamGameId">Team Game</label>
+        <select asp-for="@Model.Team.MainTeamGameId" class="form-control" id="gameSelect" onchange="addCustomGame()">
+            <option value="">Please select main team game</option>
+            <option value="Other">Other</option>
+            @foreach (Game g in Model.GamesList)
+            {
+                <option value="@g.GameId">@g.GameName</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group col-10 col-lg-4 mx-auto">
+        <label asp-for="@Model.Team.MainTeamGame.GameName">Custom Game</label>
+        <input type="text" asp-for="@Model.Team.MainTeamGame.GameName" class="form-control" id="customGameInput" disabled />
+    </div>
+
+    <div class="form-group col-12 mx-auto">
+        <label asp-for="@Model.Team.TeamDescription">Team Descrition</label>
+        <textarea type="text" asp-for="@Model.Team.TeamDescription" class="form-control">
+        </textarea>
+    </div>
+
+    <div class="form-group col-10 mx-auto mt-4 text-center">
+        <button type="submit" class="btn btn-primary me-3">Add</button>
+        <a asp-controller="Teams" asp-action="List" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+<script>
+    function addCustomGame() {
+        var gameSelect = document.getElementById("gameSelect");
+        var customGameInput = document.getElementById("customGameInput");
+
+        if (gameSelect.value === "Other") {
+            customGameInput.disabled = false;
+        } else {
+            customGameInput.disabled = true;
+            customGameInput.value = "";
+        }
+    }
+</script>

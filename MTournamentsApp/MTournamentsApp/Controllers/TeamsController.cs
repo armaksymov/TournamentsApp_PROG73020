@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MTournamentsApp.Entities;
+using MTournamentsApp.Models;
 using System.IO;
 
 namespace MTournamentsApp.Controllers
@@ -29,6 +31,66 @@ namespace MTournamentsApp.Controllers
             }
 
             return teams;
+        }
+
+        [HttpGet()]
+        public IActionResult Add()
+        {
+            List<Game> games = _tournamentsDbContext.Games.OrderBy(g => g.GameName).ToList();
+
+            return View(new TeamViewModel() { Team = new Team(), GamesList = games, PlayersList = null });
+        }
+
+        [HttpPost()]
+        public IActionResult Add(TeamViewModel t)
+        {
+            if (ModelState.IsValid)
+            {
+                Game game = _tournamentsDbContext.Games.Where(g => g.GameId == t.Team.MainTeamGameId).FirstOrDefault();
+
+                Game customGame;
+
+                if (game == null)
+                {
+                    string gameId;
+                    if (t.Team.MainTeamGame.GameName.Contains(" "))
+                    {
+                        var gameIdWords = t.Team.MainTeamGame.GameName.Split(' ');
+                        var gameIdParts = gameIdWords.Select(word => word.Substring(0, Math.Min(word.Length, 3)));
+                        gameId = string.Join("", gameIdParts);
+                    }
+                    else
+                    {
+                        gameId = t.Team.MainTeamGame.GameName.Substring(0, Math.Min(t.Team.MainTeamGame.GameName.Length, 3));
+                    }
+
+                    customGame = new Game() { GameId = gameId, GameName = t.Team.MainTeamGame.GameName };
+                    _tournamentsDbContext.Games.Add(customGame);
+
+                    t.Team.MainTeamGame = customGame;
+                    t.Team.MainTeamGameId = gameId;
+                }
+                else
+                {
+                    t.Team.MainTeamGame = game;
+                    t.Team.MainTeamGameId = game.GameId;
+                }
+
+                var teamIdWords = t.Team.TeamName.Split(' ');
+                var teamIdParts = teamIdWords.Select(word => word.Substring(0, Math.Min(word.Length, 3)));
+                t.Team.TeamId = string.Join("", teamIdParts);
+
+                _tournamentsDbContext.Teams.Add(t.Team);
+                _tournamentsDbContext.SaveChanges();
+
+                return RedirectToAction("List", "Teams");
+            }
+            else
+            {
+                List<Game> games = _tournamentsDbContext.Games.OrderBy(g => g.GameName).ToList();
+
+                return View(new TeamViewModel() { Team = new Team(), GamesList = games, PlayersList = null });
+            }
         }
 
         [HttpGet()]
