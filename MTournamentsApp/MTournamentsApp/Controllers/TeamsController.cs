@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MTournamentsApp.Entities;
@@ -33,6 +34,7 @@ namespace MTournamentsApp.Controllers
             return teams;
         }
 
+        [Authorize()]
         [HttpGet()]
         public IActionResult Add()
         {
@@ -41,6 +43,7 @@ namespace MTournamentsApp.Controllers
             return View(new TeamViewModel() { Team = new Team(), GamesList = games, PlayersList = null });
         }
 
+        [Authorize()]
         [HttpPost()]
         public IActionResult Add(TeamViewModel t)
         {
@@ -93,6 +96,7 @@ namespace MTournamentsApp.Controllers
             }
         }
 
+        [Authorize()]
         [HttpGet()]
         public IActionResult Edit(string id)
         {
@@ -118,6 +122,7 @@ namespace MTournamentsApp.Controllers
             return View(viewModel);
         }
 
+        [Authorize()]
         [HttpPost()]
         public IActionResult Edit(TeamViewModel t)
         {
@@ -136,6 +141,7 @@ namespace MTournamentsApp.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet()]
         public IActionResult Delete(string id)
         {
@@ -153,6 +159,7 @@ namespace MTournamentsApp.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost()]
         public IActionResult Delete(Team t)
         {
@@ -162,6 +169,7 @@ namespace MTournamentsApp.Controllers
             return RedirectToAction("List", "Teams");
         }
 
+        [Authorize()]
         [HttpGet()]
         public IActionResult Members(string id)
         {

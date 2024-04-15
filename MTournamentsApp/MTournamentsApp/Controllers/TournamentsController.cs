@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MTournamentsApp.Entities;
 using MTournamentsApp.Models;
@@ -20,6 +21,7 @@ namespace MTournamentsApp.Controllers
             return View(getTournaments());
         }
 
+        [Authorize()]
         [HttpGet()]
         public IActionResult Add()
         {
@@ -29,6 +31,7 @@ namespace MTournamentsApp.Controllers
             return View(new TournamentViewModel() { Tournament = new Tournament(), GamesList = games, TeamsList = teams });
         }
 
+        [Authorize()]
         [HttpPost]
         public IActionResult Add(TournamentViewModel t, List<string> SelectedTeamIds)
         {

@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using MTournamentsApp.Models;
 
 namespace MTournamentsApp.Entities
 {
-    public class TournamentsDbContext : DbContext
+    public class TournamentsDbContext : IdentityDbContext<User>
     {
-        public TournamentsDbContext(DbContextOptions<TournamentsDbContext> options) : base(options) { }
+        public TournamentsDbContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Game> Games { get; set; }
         public DbSet<Player> Players { get; set; }
@@ -15,6 +18,8 @@ namespace MTournamentsApp.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Player>()
                .HasOne(p => p.Role)
                .WithMany()
@@ -71,5 +76,31 @@ namespace MTournamentsApp.Entities
             );
         }
 
+        public static async Task CreateAdminUser(IServiceProvider serviceProvider)
+        {
+            UserManager<User> userManager =
+                serviceProvider.GetRequiredService<UserManager<User>>();
+            RoleManager<IdentityRole> roleManager = serviceProvider
+                .GetRequiredService<RoleManager<IdentityRole>>();
+
+            string username = "admin";
+            string password = "123";
+            string roleName = "Admin";
+
+            if (await roleManager.FindByNameAsync(roleName) == null)
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+
+            if (await userManager.FindByNameAsync(username) == null)
+            {
+                User user = new User { UserName = username };
+                var result = await userManager.CreateAsync(user, password);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, roleName);
+                }
+            }
+        }
     }
 }
