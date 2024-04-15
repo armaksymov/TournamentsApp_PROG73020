@@ -3,16 +3,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MTournamentsApp.Entities;
 using MTournamentsApp.Models;
+using MTournamentsApp.Services;
 using System.IO;
 
 namespace MTournamentsApp.Controllers
 {
     public class TournamentsController : Controller
     {
+        private IMail _mail;
         private TournamentsDbContext _tournamentsDbContext;
 
-        public TournamentsController(TournamentsDbContext tournamentsDbContext)
+        public TournamentsController(IMail mail, TournamentsDbContext tournamentsDbContext)
         {
+            _mail = mail;
             _tournamentsDbContext = tournamentsDbContext;
         }
 
@@ -106,6 +109,54 @@ namespace MTournamentsApp.Controllers
             Tournament tournament = _tournamentsDbContext.Tournaments.Include(t => t.Address).Include(t => t.TournamentTeams).Where(t => t.Id == id).FirstOrDefault();
 
             return View(new TournamentViewModel() { Tournament = tournament, GamesList = games, TeamsList = teams });
+        }
+
+        [HttpGet()]
+        public IActionResult Cancel(int id)
+        {
+            var tournament = _tournamentsDbContext.Tournaments
+                                .Include(t => t.TournamentTeams)
+                                .ThenInclude(team => team.Players)
+                                .FirstOrDefault(t => t.Id == id);
+
+            if (tournament == null)
+            {
+                return NotFound();
+            }
+
+            return View(tournament);
+        }
+
+        [HttpPost()]
+        public IActionResult CancelConfirmed(int id)
+        {
+            var tournament = _tournamentsDbContext.Tournaments
+                        .Include(t => t.TournamentTeams)
+                        .FirstOrDefault(t => t.Id == id);
+
+            if (tournament == null)
+            {
+                return NotFound();
+            }
+
+            var teamsWithPlayers = _tournamentsDbContext.Teams
+                          .Where(t => tournament.TeamIds.Contains(t.TeamId))
+                          .Include(t => t.Players)
+                          .ToList();
+
+            var allPlayers = teamsWithPlayers.SelectMany(t => t.Players).Distinct().ToList();
+
+
+
+            foreach (var player in allPlayers)
+            {
+                _mail.SendCancellation(tournament, player);
+            }
+
+            _tournamentsDbContext.Tournaments.Remove(tournament);
+            _tournamentsDbContext.SaveChanges();
+
+            return View("List");
         }
     }
 }

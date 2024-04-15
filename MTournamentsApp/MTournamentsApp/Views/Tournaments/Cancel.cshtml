@@ -1,0 +1,22 @@
+﻿@model Tournament
+
+@{
+    ViewData["Title"] = "Cancel Tournament";
+}
+
+<a class="text-muted mt-3 mb-0 btn btn-lg" onclick="javascript:window.history.back();">← Back</a>
+<p class="h1 mb-4 text-center">Cancel an existing tournament</p>
+
+<form class="row gx-4" asp-controller="Tournaments" asp-action="CancelConfirmed" method="post">
+    <h3 class="col-12">Confirm Tournament Cancellation</h3>
+    <p class="col-12 mt-1">
+        Are you sure you want to cancel the tournament "<strong>@Model.TournamentName</strong>"?
+    </p>
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group col-12 mt-4">
+        <button type="submit" class="btn btn-primary me-3">Yes</button>
+        <a asp-controller="Tournaments" asp-action="List" class="btn btn-secondary">No</a>
+    </div>
+</form>
