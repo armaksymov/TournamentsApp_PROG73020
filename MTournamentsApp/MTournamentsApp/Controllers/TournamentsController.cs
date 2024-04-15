@@ -97,5 +97,15 @@ namespace MTournamentsApp.Controllers
 
             return RedirectToAction("List", "Tournaments");
         }
+
+        [HttpGet()]
+        public IActionResult Edit(int id)
+        {
+            List<Game> games = _tournamentsDbContext.Games.OrderBy(g => g.GameName).ToList();
+            List<Team> teams = _tournamentsDbContext.Teams.OrderBy(t => t.TeamName).ToList();
+            Tournament tournament = _tournamentsDbContext.Tournaments.Include(t => t.Address).Include(t => t.TournamentTeams).Where(t => t.Id == id).FirstOrDefault();
+
+            return View(new TournamentViewModel() { Tournament = tournament, GamesList = games, TeamsList = teams });
+        }
     }
 }
