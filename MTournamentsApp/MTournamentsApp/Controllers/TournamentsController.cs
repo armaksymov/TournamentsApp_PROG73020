@@ -45,7 +45,26 @@ namespace MTournamentsApp.Controllers
             return View(new TournamentViewModel() { Tournament = newTournament, GamesList = games, TeamsList = teams });
         }
 
-        [HttpPost("Tournaments/REST/Add")]
+		[HttpGet("Tournaments/REST/List")]
+		public async Task<IActionResult> RESTList()
+		{
+			var tournamentsList = _tournamentsDbContext.Tournaments
+				.Include(t => t.Address)
+                .Select(t => new
+				{
+					t.Id,
+					t.TournamentName,
+					t.TournamentDate,
+					t.TournamentGameId,
+                    t.Address,
+					t.TeamIds,
+				})
+				.ToList();
+
+			return Ok(new { tournaments = tournamentsList, total = tournamentsList.Count() });
+		}
+
+		[HttpPost("Tournaments/REST/Add")]
 		public async Task<IActionResult> RESTAdd([FromBody] TournamentRequest tournamentRequest)
 		{
 			try
