@@ -6,7 +6,9 @@ using MTournamentsApp.Models;
 
 namespace MTournamentsApp.Controllers
 {
-    public class MembersController : Controller
+	[ApiController]
+	[Route("[controller]")]
+	public class MembersController : Controller
     {
         private TournamentsDbContext _tournamentsDbContext;
 
@@ -72,7 +74,7 @@ namespace MTournamentsApp.Controllers
             }
         }
 
-		[HttpPost]
+		[HttpPost("member/add")]
 		public async Task<IActionResult> RESTAdd([FromBody] Player player)
 		{
 			try
