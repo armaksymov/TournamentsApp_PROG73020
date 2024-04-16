@@ -198,7 +198,15 @@ namespace MTournamentsApp.Controllers
 		[HttpPost()]
 		public IActionResult Delete(Team t)
 		{
-			_tournamentsDbContext.Teams.Remove(t);
+			var players = _tournamentsDbContext.Players.Where(p => p.TeamId == t.TeamId).ToList();
+
+            foreach (var player in players)
+            {
+				player.TeamId = null;
+                _tournamentsDbContext.SaveChanges();
+            }
+
+            _tournamentsDbContext.Teams.Remove(t);
 			_tournamentsDbContext.SaveChanges();
 
 			return RedirectToAction("List", "Teams");

@@ -155,7 +155,7 @@ namespace MTournamentsApp.Controllers
 
             _tournamentsDbContext.SaveChanges();
 
-            return RedirectToAction("Members", "Teams", new { id = teamId });
+            return RedirectToAction("List", "Teams", new { id = teamId });
         }
 
         [HttpGet()]

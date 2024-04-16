@@ -4,9 +4,8 @@
     ViewData["Title"] = "Delete Member";
 }
 
-<a class="text-muted mt-3 mb-0 btn btn-lg" onclick="javascript:window.history.back();"><- Back</a>
-
-<p class="h1 mb-4 text-center">Deleting an existing member</p>
+<a class="mt-3 mb-0 btn btn-secondary" onclick="javascript:window.history.back();">← Back</a>
+<p class="h1 mb-4 text-center">Delete an existing member</p>
 
 <form class="row gx-4" asp-controller="Members" asp-action="Delete" method="post" enctype="application/x-www-form-urlencoded">
     <h3 class="col-10">Confirm Member Deletion</h3>

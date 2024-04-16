@@ -1,10 +1,10 @@
 ﻿@model PlayerViewModel
 
 @{
-    ViewData["Title"] = "Adding Member";
+    ViewData["Title"] = "Add Member";
 }
 
-<a class="text-muted mt-3 mb-0 btn btn-lg" asp-asp-controller="Members" asp-action="List"><- Back</a>
+<a class="mt-3 mb-0 btn btn-secondary" onclick="javascript:window.history.back();">← Back</a>
 <p class="h1 mb-3 text-center">Add a new member</p>
 
 <form class="row gx-4 align-items-center justify-content-center" asp-controller="Members" asp-action="Add" method="post" enctype="application/x-www-form-urlencoded">
