@@ -29,7 +29,7 @@
 
         <div class="form-group col-10 col-md-4">
             <label asp-for="@Model.Tournament.TournamentDate">Tournament Date</label>
-            <input type="date" max="@DateTime.Today.AddYears(100).ToString("yyyy-MM-dd")" min="@DateTime.Today.ToString("yyyy-MM-dd")" asp-for="@Model.Tournament.TournamentDate" class="form-control" />
+            <input type="date" max="@DateTime.Today.AddYears(100).ToString("yyyy-MM-dd")" asp-for="@Model.Tournament.TournamentDate" class="form-control" />
         </div>
 
 
@@ -60,33 +60,33 @@
             margin: 20px auto;
         }
 
-            #teamsList .form-check {
-                margin-bottom: 10px;
-                width: 100%;
-                display: block;
-            }
+        #teamsList .form-check {
+            margin-bottom: 10px;
+            width: 100%;
+            display: block;
+        }
 
-            #teamsList .form-check-input {
-                margin-right: 10px;
-                cursor: pointer;
-            }
+        #teamsList .form-check-input {
+            margin-right: 10px;
+            cursor: pointer;
+        }
 
-            #teamsList .form-check-label {
-                cursor: pointer;
-                text-align: left;
-                display: block;
-            }
+        #teamsList .form-check-label {
+            cursor: pointer;
+            text-align: left;
+            display: block;
+        }
 
-            #teamsList div.w-100 {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                border: 1px solid #ccc;
-                padding: 15px;
-                border-radius: 8px;
-                width: 100%;
-                max-width: 600px;
-            }
+        #teamsList div.w-100 {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+        }
     </style>
 
     <div class="form-group d-flex flex-column align-items-center my-3" id="teamsList">
@@ -95,20 +95,17 @@
             @foreach (var team in Model.TeamsList)
             {
                 <div class="form-check text-center team" data-game-id="@team.MainTeamGameId" style="display: none;">
-                    @if (Model.Tournament.TournamentTeams.Any(tt => tt.TeamId == team.TeamId))
-                    {
-                        <input type="checkbox" class="form-check-input" id="team-@team.TeamId" name="SelectedTeamIds" value="@team.TeamId" checked/>
-                    }
-                    else
-                    {
-                        <input type="checkbox" class="form-check-input" id="team-@team.TeamId" name="SelectedTeamIds" value="@team.TeamId" />
-                    }
+                    <input type="checkbox" class="form-check-input" id="team-@team.TeamId"
+                           name="SelectedTeamIds" value="@team.TeamId"
+                    @(Model.SelectedTeamIds.Contains(team.TeamId) ? "checked" : "") />
                     <label class="form-check-label" for="team-@team.TeamId">@team.TeamName</label>
                 </div>
             }
             <p id="noTeams" style="display: none;">No teams available.</p>
         </div>
     </div>
+
+    <input type="hidden" asp-for="@Model.Tournament.Id" />
 
     <div class="form-group col-10 mx-auto mt-4 text-center">
         <button type="submit" class="btn btn-primary me-3">Update</button>
