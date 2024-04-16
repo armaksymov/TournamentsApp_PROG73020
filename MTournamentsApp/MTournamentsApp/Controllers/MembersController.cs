@@ -72,7 +72,28 @@ namespace MTournamentsApp.Controllers
             }
         }
 
-        [HttpGet()]
+		[HttpPost]
+		public async Task<IActionResult> RESTAdd([FromBody] Player player)
+		{
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					return BadRequest(ModelState);
+				}
+
+				await _tournamentsDbContext.Players.AddAsync(player);
+				await _tournamentsDbContext.SaveChangesAsync();
+
+				return Ok(new { memberId = player.Id });
+			}
+			catch (Exception exception)
+			{
+				return StatusCode(500, exception.Message);
+			}
+		}
+
+		[HttpGet()]
         public IActionResult Edit(int id)
         {
             List<PlayerRole> playerRoles = _tournamentsDbContext.PlayerRoles.OrderBy(pr => pr.PlayerRoleName).ToList();
