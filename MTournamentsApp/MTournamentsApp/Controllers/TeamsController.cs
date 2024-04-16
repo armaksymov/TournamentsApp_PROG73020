@@ -20,6 +20,7 @@ namespace MTournamentsApp.Controllers
         {
             return View(GetTeams());
         }
+
         private List<Team> GetTeams()
         {
             List<Team> teams = _tournamentsDbContext.Teams.Include(t => t.MainTeamGame).ToList();

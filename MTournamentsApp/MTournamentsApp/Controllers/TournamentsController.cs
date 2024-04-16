@@ -54,7 +54,14 @@ namespace MTournamentsApp.Controllers
                 {
                     ModelState.AddModelError("SelectedTeamIds", "Please select at least two teams for the tournament.");
                 }
-                return View(tvm);
+
+				List<Game> g = _tournamentsDbContext.Games.OrderBy(g => g.GameName).ToList();
+				List<Team> t = _tournamentsDbContext.Teams.OrderBy(t => t.TeamName).ToList();
+
+                tvm.GamesList = g;
+                tvm.TeamsList = t;
+
+				return View(tvm);
             }
 
             Address? address = _tournamentsDbContext.Addresses.Where(a => a.StreetAddress == tvm.Tournament.Address.StreetAddress && a.TournamentCity == tvm.Tournament.Address.TournamentCity && a.TournamentCountry == tvm.Tournament.Address.TournamentCountry).FirstOrDefault();
