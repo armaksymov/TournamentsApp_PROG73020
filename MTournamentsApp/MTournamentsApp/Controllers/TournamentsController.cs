@@ -45,7 +45,54 @@ namespace MTournamentsApp.Controllers
             return View(new TournamentViewModel() { Tournament = newTournament, GamesList = games, TeamsList = teams });
         }
 
-        [HttpPost()]
+        [HttpPost("Tournaments/REST/Add")]
+		public async Task<IActionResult> RESTAdd([FromBody] TournamentRequest tournamentRequest)
+		{
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					return BadRequest(ModelState);
+				}
+
+				await _tournamentsDbContext.Addresses.AddAsync(tournamentRequest.Address);
+				await _tournamentsDbContext.SaveChangesAsync();
+
+				tournamentRequest.Tournament.AddressID = tournamentRequest.Address.Id;
+
+				await _tournamentsDbContext.Tournaments.AddAsync(tournamentRequest.Tournament);
+				await _tournamentsDbContext.SaveChangesAsync();
+
+				var teamIds = tournamentRequest.Tournament.TeamIds;
+
+				List<Team> teams = _tournamentsDbContext.Teams.Where(t => teamIds.Contains(t.TeamId)).ToList();
+
+				foreach (var team in teams)
+				{
+					if (team.TournamentIds.IsNullOrEmpty())
+					{
+						team.TournamentIds = new List<int>();
+					}
+					if (team.Tournaments.IsNullOrEmpty())
+					{
+						team.Tournaments = new List<Tournament>();
+					}
+					team.TournamentIds.Add(tournamentRequest.Tournament.Id);
+					team.Tournaments.Add(tournamentRequest.Tournament);
+					_tournamentsDbContext.Teams.Update(team);
+				}
+
+				_tournamentsDbContext.SaveChanges();
+
+				return Ok(new { tournamentId = tournamentRequest.Tournament.Id });
+			}
+			catch (Exception exception)
+			{
+				return StatusCode(500, exception.Message);
+			}
+		}
+
+		[HttpPost()]
         public IActionResult Add(TournamentViewModel tvm, List<string> SelectedTeamIds)
         {
             if (!ModelState.IsValid || SelectedTeamIds.Count < 2)

@@ -72,7 +72,7 @@ namespace MTournamentsApp.Controllers
             }
         }
 
-		[HttpPost("REST/Add")]
+		[HttpPost("Members/REST/Add")]
 		public async Task<IActionResult> RESTAdd([FromBody] Player player)
 		{
 			try
