@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using MTournamentsApp.Entities;
 using MTournamentsApp.Models;
 using System.IO;
+using System.Numerics;
 
 namespace MTournamentsApp.Controllers
 {
@@ -42,7 +43,29 @@ namespace MTournamentsApp.Controllers
             return View(new TeamViewModel() { Team = new Team(), GamesList = games, PlayersList = null });
         }
 
-        [HttpPost()]
+        [HttpPost("Teams/REST/Add")]
+		public async Task<IActionResult> RESTAdd([FromBody] Team team)
+        {
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					return BadRequest(ModelState);
+				}
+
+				await _tournamentsDbContext.Teams.AddAsync(team);
+				await _tournamentsDbContext.SaveChangesAsync();
+
+				return Ok(new { teamId = team.TeamId });
+			}
+			catch (Exception exception)
+			{
+				return StatusCode(500, exception.Message);
+			}
+		}
+
+
+		[HttpPost()]
         public IActionResult Add(TeamViewModel t)
         {
             if (ModelState.IsValid)
