@@ -31,9 +31,9 @@
                         <td>@t.TournamentGame?.GameName</td>
                         <td>@t.Address?.ToString()</td>
                         <td>
-                            @if (t.TournamentTeams != null && t.TournamentTeams.Count() > 0)
+                            @if (t.TeamIds != null && t.TeamIds.Count() > 0)
                             {
-                                <a asp-controller="Tournaments" asp-action="Teams" asp-route-id="@t.Id">@t.TournamentTeams.Count()</a>
+                                <a asp-controller="Tournaments" asp-action="Teams" asp-route-id="@t.Id">@t.TeamIds.Count()</a>
                             }
                             else
                             {
