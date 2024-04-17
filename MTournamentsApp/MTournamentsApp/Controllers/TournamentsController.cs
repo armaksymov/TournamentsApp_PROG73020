@@ -354,5 +354,32 @@ namespace MTournamentsApp.Controllers
                 return RedirectToAction("List", "Tournaments");
             }
         }
+
+        [HttpGet()]
+        public IActionResult Manage(int id)
+        {
+            Tournament? tournament = _tournamentsDbContext.Tournaments.Include(t => t.TournamentGame).Where(t => t.Id == id).FirstOrDefault();
+            if (tournament == null)
+            {
+                return RedirectToAction("List", "Tournaments");
+            }
+
+            tournament.TournamentTeams = _tournamentsDbContext.Teams.Include(t => t.MainTeamGame).Where(t => tournament.TeamIds.Any(teamId => teamId == t.TeamId)).ToList();
+
+            foreach (var team in tournament.TournamentTeams)
+            {
+                team.Players = _tournamentsDbContext.Players.Where(p => p.TeamId == team.TeamId).OrderBy(p => p.Id).ToList();
+                team.Tournaments = _tournamentsDbContext.Tournaments.Where(t => t.TeamIds!.Contains(team.TeamId!)).ToList();
+            }
+
+            if (tournament != null)
+            {
+                return View(tournament);
+            }
+            else
+            {
+                return RedirectToAction("List", "Tournaments");
+            }
+        }
     }
 }
