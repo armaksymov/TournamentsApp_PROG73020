@@ -225,10 +225,8 @@ namespace MTournamentsApp.Controllers
                 return NotFound();
             }
 
-            if (!ModelState.IsValid || tvm.SelectedTeamIds.Count < 2)
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("SelectedTeamIds", "Please select at least two teams for the tournament.");
-
                 tvm.GamesList = _tournamentsDbContext.Games.OrderBy(g => g.GameName).ToList();
                 tvm.TeamsList = _tournamentsDbContext.Teams.OrderBy(t => t.TeamName).ToList();
                 tvm.Tournament = existingTournament;
