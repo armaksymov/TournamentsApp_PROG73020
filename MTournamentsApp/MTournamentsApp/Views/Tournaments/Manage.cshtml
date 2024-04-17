@@ -1,0 +1,88 @@
+﻿@model Tournament
+
+@{
+    ViewData["Title"] = "Tournament Management";
+}
+
+<p class="h1 mb-3">@Model.TournamentName Management</p>
+<a class="btn btn-primary mb-3" asp-controller="Tournaments" asp-action="Cancel" asp-route-id="@Model.Id">Cancel This Tournament</a>
+
+@if (Model != null)
+{
+    <p class="h5 mb-3">@Model.TournamentName is on @Model.TournamentDate?.ToString("MMM dd, yyyy") with @Model.TournamentTeams.Count() teams participating.</p>
+    if (Model.TournamentTeams.Count() > 0)
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Team Name</th>
+                    <th>Team Description</th>
+                    <th>Game</th>
+                    <th># of Members</th>
+                    <th>List of Members</th>
+                    <th>Invite Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Team t in Model.TournamentTeams)
+                {
+                    <tr>
+                        <td>@t.TeamName</td>
+                        <td>@t.TeamDescription</td>
+                        <td>@Model.TournamentGame.GameName</td>
+                        <td>@t.Players.Count()</td>
+                        <td>
+                            @if (t.Players != null && t.Players.Count() > 0)
+                            {
+                                <ul>
+                                    @foreach (Player p in t.Players.Take(t.Players.Count() <= 5 ? t.Players.Count() : 5))
+                                    {
+                                        <li>@p.FirstName @p.LastName, @p.Age y.o.</li>
+                                    }
+                                </ul>
+                                <div id="expandButtonContainer" style="@(t.Players.Count() <= 5 ? "display:none" : "")">
+                                    <button id="expandButton">Expand</button>
+                                </div>
+                                <script>
+                                    
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        var expandButton = document.getElementById('expandButton');
+                                        var playerList = document.getElementById('playerList');
+                                        var allPlayers = @Html.Raw(Json.Serialize(t.Players.Select(p => new { p.FirstName, p.LastName, p.Age })));
+
+                                        expandButton.onclick = function() {
+                                            allPlayers.slice(5).forEach(p =>
+                                            {
+                                                let newListItem = document.createElement('li');
+                                                newListItem.textContent = `${ p.FirstName} ${ p.lastName}, ${ p.Age}
+                                                y.o.`;
+                                                playerList.appendChild(newListItem);
+                                            });
+                                            expandButtonContainer.style.display = 'none';
+                                        };
+                                    });
+                                </script>
+                            }
+                            else
+                            {
+                                <p class="text-muted">No Team Participants Found</p>
+                            }
+                        </td>
+                        <td></td>
+                        <td class="text-center"><a asp-controller="Teams" asp-action="Invite" asp-route-id="@t.TeamId">Invite</a><span class="mx-3">|</span><a asp-controller="Teams" asp-action="Kick" asp-route-id="@t.TeamId">Kick Out</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted h3 mb-4 text-center">No teams are currently registered.</p>
+    }
+
+}
+else
+{
+    <p class="text-muted h3 mb-4 text-center">Tournament Not Found.</p>
+}
