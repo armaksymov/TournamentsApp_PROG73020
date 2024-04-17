@@ -367,7 +367,7 @@ namespace MTournamentsApp.Controllers
 
             foreach (var team in tournament.TournamentTeams)
             {
-                team.Players = _tournamentsDbContext.Players.Where(p => p.TeamId == team.TeamId).OrderBy(p => p.Id).ToList();
+                team.Players = _tournamentsDbContext.Players.Include(p => p.Role).Where(p => p.TeamId == team.TeamId).OrderBy(p => p.Id).ToList();
                 team.Tournaments = _tournamentsDbContext.Tournaments.Where(t => t.TeamIds!.Contains(team.TeamId!)).ToList();
             }
 
