@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MTournamentsApp.Entities;
@@ -36,6 +37,7 @@ namespace MTournamentsApp.Controllers
             return tournaments;
         }
 
+        [Authorize()]
         [HttpGet()]
         public IActionResult Add()
         {
@@ -112,6 +114,7 @@ namespace MTournamentsApp.Controllers
             }
         }
 
+        [Authorize()]
         [HttpPost()]
         public IActionResult Add(TournamentViewModel tvm, List<string> SelectedTeamIds)
         {
@@ -175,6 +178,7 @@ namespace MTournamentsApp.Controllers
             return RedirectToAction("List", "Tournaments");
         }
 
+        [Authorize()]
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -202,7 +206,7 @@ namespace MTournamentsApp.Controllers
             return View(viewModel);
         }
 
-
+        [Authorize()]
         [HttpPost()]
         public IActionResult Edit(TournamentViewModel tvm)
         {
@@ -273,7 +277,7 @@ namespace MTournamentsApp.Controllers
             return RedirectToAction("List", "Tournaments");
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet()]
         public IActionResult Cancel(int id)
         {
@@ -290,6 +294,7 @@ namespace MTournamentsApp.Controllers
             return View(tournament);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost()]
         public IActionResult CancelConfirmed(int id)
         {
