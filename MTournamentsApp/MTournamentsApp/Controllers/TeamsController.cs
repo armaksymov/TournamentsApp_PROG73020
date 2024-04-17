@@ -6,6 +6,7 @@ using MTournamentsApp.Entities;
 using MTournamentsApp.Models;
 using System.IO;
 using System.Numerics;
+using System.Security.AccessControl;
 
 namespace MTournamentsApp.Controllers
 {
@@ -54,6 +55,21 @@ namespace MTournamentsApp.Controllers
                 {
                     return BadRequest(ModelState);
                 }
+
+                string teamId;
+
+                if (team.TeamName.Contains(" "))
+                {
+                    var teamIdWords = team.TeamName.Split(' ');
+                    var teamIdParts = teamIdWords.Select(word => word.Substring(0, Math.Min(word.Length, 3)));
+                    teamId = string.Join("", teamIdParts);
+                }
+                else
+                {
+                    teamId = team.TeamName.Substring(0, Math.Min(team.TeamName.Length, 3));
+                }
+
+                team.TeamId = teamId;
 
                 await _tournamentsDbContext.Teams.AddAsync(team);
                 await _tournamentsDbContext.SaveChangesAsync();
