@@ -9,7 +9,7 @@ namespace MTournamentsApp.Entities
         [Required(ErrorMessage = "Please provide the team's name")]
         public string? TeamName { get; set; }
 
-        public string? TeamDescription { get; set;}
+        public string? TeamDescription { get; set; }
 
         [Required(ErrorMessage = "Please select the team's game")]
         public string? MainTeamGameId { get; set; }

@@ -8,7 +8,7 @@ namespace MTournamentsApp.Entities
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage="Please provide the player's first name")]
+        [Required(ErrorMessage = "Please provide the player's first name")]
         public string? FirstName { get; set; }
 
         [Required(ErrorMessage = "Please provide the player's last name")]
@@ -29,7 +29,7 @@ namespace MTournamentsApp.Entities
             get
             {
                 DateTime today = DateTime.Today;
-                int age = today.Year  - DateOfBirth.Year;
+                int age = today.Year - DateOfBirth.Year;
 
                 if (today.Month < DateOfBirth.Month || (today.Month == DateOfBirth.Month && today.Day < DateOfBirth.Day))
                 {
@@ -44,7 +44,7 @@ namespace MTournamentsApp.Entities
         public string? PlayerRoleId { get; set; }
         public PlayerRole? Role { get; set; }
 
-        public string? TeamId { get; set;}
+        public string? TeamId { get; set; }
         public Team? Team { get; set; }
 
         public List<Invitation>? Invitations { get; set; } = null;

@@ -10,4 +10,3 @@ namespace MTournamentsApp.Models
         public Player? Player { get; set; }
     }
 }
-    

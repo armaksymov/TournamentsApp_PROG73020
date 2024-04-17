@@ -12,18 +12,57 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MTournamentsApp.Migrations
 {
     [DbContext(typeof(TournamentsDbContext))]
-    [Migration("20240415023802_AuthInitial")]
-    partial class AuthInitial
+    [Migration("20240417152108_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("MTournamentsApp.Entities.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("StreetAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TournamentCity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TournamentCountry")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TournamentPostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Addresses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            StreetAddress = "123 Random St S",
+                            TournamentCity = "Toronto",
+                            TournamentCountry = "Canada",
+                            TournamentPostalCode = "H0H 0H0"
+                        });
+                });
 
             modelBuilder.Entity("MTournamentsApp.Entities.Game", b =>
                 {
@@ -103,6 +142,7 @@ namespace MTournamentsApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PlayerRoleId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TeamId")
@@ -217,9 +257,8 @@ namespace MTournamentsApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("AddressID")
+                        .HasColumnType("int");
 
                     b.Property<string>("TeamIds")
                         .HasColumnType("nvarchar(max)");
@@ -237,6 +276,8 @@ namespace MTournamentsApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AddressID");
+
                     b.HasIndex("TournamentGameId");
 
                     b.ToTable("Tournaments");
@@ -245,7 +286,7 @@ namespace MTournamentsApp.Migrations
                         new
                         {
                             Id = 1,
-                            Address = "",
+                            AddressID = 1,
                             TeamIds = "[\"ConCE\"]",
                             TournamentDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TournamentGameId = "val",
@@ -481,7 +522,9 @@ namespace MTournamentsApp.Migrations
                 {
                     b.HasOne("MTournamentsApp.Entities.PlayerRole", "Role")
                         .WithMany()
-                        .HasForeignKey("PlayerRoleId");
+                        .HasForeignKey("PlayerRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MTournamentsApp.Entities.Team", "Team")
                         .WithMany("Players")
@@ -505,9 +548,15 @@ namespace MTournamentsApp.Migrations
 
             modelBuilder.Entity("MTournamentsApp.Entities.Tournament", b =>
                 {
+                    b.HasOne("MTournamentsApp.Entities.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressID");
+
                     b.HasOne("MTournamentsApp.Entities.Game", "TournamentGame")
                         .WithMany()
                         .HasForeignKey("TournamentGameId");
+
+                    b.Navigation("Address");
 
                     b.Navigation("TournamentGame");
                 });
