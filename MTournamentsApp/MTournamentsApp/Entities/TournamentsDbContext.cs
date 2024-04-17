@@ -94,7 +94,7 @@ namespace MTournamentsApp.Entities
                 .GetRequiredService<RoleManager<IdentityRole>>();
 
             string username = "admin";
-            string password = "123";
+            string password = "Mtz_123";
             string roleName = "Admin";
 
             if (await roleManager.FindByNameAsync(roleName) == null)
