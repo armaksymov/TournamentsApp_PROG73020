@@ -352,7 +352,8 @@ namespace MTournamentsApp.Controllers
                 return RedirectToAction("List", "Tournaments");
             }
         }
-
+        
+        [Authorize(Roles = "Admin")]
         [HttpGet()]
         public IActionResult Manage(int id)
         {
