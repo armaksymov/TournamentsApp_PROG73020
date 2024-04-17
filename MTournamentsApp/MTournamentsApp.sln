@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34601.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTournamentsApp", "MTournamentsApp\MTournamentsApp.csproj", "{58FFD680-417C-466E-9CAB-93E76C52B6F7}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "MTournamentsAPIClient", "MTournamentsAPIClient\MTournamentsAPIClient.pyproj", "{29174FE1-7E51-4932-BF13-38D016A48285}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{58FFD680-417C-466E-9CAB-93E76C52B6F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58FFD680-417C-466E-9CAB-93E76C52B6F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58FFD680-417C-466E-9CAB-93E76C52B6F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29174FE1-7E51-4932-BF13-38D016A48285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29174FE1-7E51-4932-BF13-38D016A48285}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
