@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using MTournamentsApp.Models;
 
 namespace MTournamentsApp.Entities
 {
-    public class TournamentsDbContext : DbContext
+    public class TournamentsDbContext : IdentityDbContext<User>
     {
-        public TournamentsDbContext(DbContextOptions<TournamentsDbContext> options) : base(options) { }
+        public TournamentsDbContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<Address> Addresses { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<PlayerRole> PlayerRoles { get; set; }
@@ -16,6 +18,8 @@ namespace MTournamentsApp.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Player>()
                .HasOne(p => p.Role)
                .WithMany()
@@ -30,11 +34,6 @@ namespace MTournamentsApp.Entities
                 .HasOne(t => t.TournamentGame)
                 .WithMany()
                 .HasForeignKey(t => t.TournamentGameId);
-
-            modelBuilder.Entity<Tournament>()
-                .HasOne(t => t.Address)
-                .WithMany()
-                .HasForeignKey(t => t.AddressID);
 
             modelBuilder.Entity<Tournament>()
                 .HasMany(t => t.TournamentTeams)
@@ -63,10 +62,6 @@ namespace MTournamentsApp.Entities
                 new PlayerRole() { PlayerRoleId = "P", PlayerRoleName = "Player" }
             );
 
-            modelBuilder.Entity<Address>().HasData(
-                new Address() { Id = 1, StreetAddress = "123 Random St S", TournamentCity = "Toronto", TournamentCountry = "Canada", TournamentPostalCode = "H0H 0H0" }
-            );
-
             modelBuilder.Entity<Player>().HasData(
                 new Player() { Id = 1, FirstName = "Test", LastName = "User #1", Email = "", DateOfBirth = DateTime.Parse("01-01-2000"), PlayerRoleId = "C", TeamId = "ConCE" },
                 new Player() { Id = 2, FirstName = "Test", LastName = "User #2", Email = "", DateOfBirth = DateTime.Parse("01-01-2002"), PlayerRoleId = "P", TeamId = "ConCE" }
@@ -77,9 +72,35 @@ namespace MTournamentsApp.Entities
             );
 
             modelBuilder.Entity<Tournament>().HasData(
-                new Tournament() { Id = 1, TournamentName = "Conestoga College Home Tournament", TournamentDate = DateTime.Parse("01-01-2024"), AddressID = 1, TournamentGameId = "val", TeamIds = new List<string> { "ConCE" } }
+                new Tournament() { Id = 1, TournamentName = "Conestoga College Home Tournament", TournamentDate = DateTime.Parse("01-01-2024"), Address = "", TournamentGameId = "val", TeamIds = new List<string> { "ConCE" } }
             );
         }
 
+        public static async Task CreateAdminUser(IServiceProvider serviceProvider)
+        {
+            UserManager<User> userManager =
+                serviceProvider.GetRequiredService<UserManager<User>>();
+            RoleManager<IdentityRole> roleManager = serviceProvider
+                .GetRequiredService<RoleManager<IdentityRole>>();
+
+            string username = "admin";
+            string password = "123";
+            string roleName = "Admin";
+
+            if (await roleManager.FindByNameAsync(roleName) == null)
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+
+            if (await userManager.FindByNameAsync(username) == null)
+            {
+                User user = new User { UserName = username };
+                var result = await userManager.CreateAsync(user, password);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, roleName);
+                }
+            }
+        }
     }
 }

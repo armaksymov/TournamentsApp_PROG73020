@@ -8,16 +8,16 @@ namespace MTournamentsApp.Entities
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Please enter the Tournament Name")]
+        [Required(ErrorMessage = "Please enter the tournament name")]
         public string? TournamentName { get; set; }
 
         [Column(TypeName = "datetime")]
-        [Required(ErrorMessage = "Please enter the Tournament Date")]
+        [Required(ErrorMessage = "Please enter the tournament date")]
         [TournamentDateValidation]
         public DateTime? TournamentDate { get; set; }
 
-        public int? AddressID { get; set; }
-        public Address? Address { get; set; }
+        [Required(ErrorMessage = "Please enter the tournament address")]
+        public string? Address { get; set; }
 
         public string? TournamentGameId { get; set; }
         public Game? TournamentGame { get; set; }

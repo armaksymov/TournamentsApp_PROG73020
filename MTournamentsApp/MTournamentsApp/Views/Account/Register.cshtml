@@ -1,0 +1,51 @@
+﻿@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<a class="text-muted mt-3 mb-0 btn btn-lg" onclick="javascript:window.history.back();">← Back</a>
+<p class="h1 mb-3 text-center">Register</p>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form class="row gx-4 justify-content-center" asp-controller="Account" asp-action="Register">
+    <div class="form-group row mb-3">
+        <!-- Added mb-3 for margin-bottom -->
+        <div class="col-sm-2"><label>Username:</label></div>
+        <div class="col-sm-4">
+            <input asp-for="Username" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row mb-3">
+        <!-- Added mb-3 for margin-bottom -->
+        <div class="col-sm-2"><label>Password:</label></div>
+        <div class="col-sm-4">
+            <input type="password" asp-for="Password" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row mb-3">
+        <!-- Added mb-3 for margin-bottom -->
+        <div class="col-sm-2"><label>Confirm Password:</label></div>
+        <div class="col-sm-4">
+            <input type="password" asp-for="ConfirmPassword" class="form-control" />
+        </div>
+    </div>
+    <div class="row mb-4">
+        <!-- Added mb-4 for bottom spacing -->
+        <div class="offset-2 col-sm-4">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <!-- Added mb-4 for bottom spacing -->
+        <div class="offset-2 col-sm-4">
+            Already registered? <a asp-controller="Account" asp-action="LogIn">Log In</a>
+        </div>
+    </div>
+</form>

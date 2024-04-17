@@ -34,6 +34,33 @@
                                 <a class="nav-link text-muted" asp-area="" asp-controller="Members" asp-action="List">Members</a>
                             </li>
                         </ul>
+
+                        <!-- place login/register/logout controls here -->
+                        @using Microsoft.AspNetCore.Identity
+                        @inject SignInManager<User> _signInManager
+
+                        <ul class="navbar-nav">
+                            @if (_signInManager.IsSignedIn(User))
+                            {
+                                <!-- Display logged in user name -->
+                                <li class="nav-item">
+                                    <form class="form-inline" asp-controller="Account" asp-action="LogOut" method="post">
+                                        <input type="submit" class="nav-link text-muted btn btn-link text-dark" style="font-weight: bold;" value="Logout @User.Identity.Name" />
+                                    </form>
+                                </li>
+                            }
+                            else
+                            {
+                                <!-- Register link -->
+                                <li class="nav-item">
+                                    <a class="nav-link text-muted text-dark" style="font-weight: bold;" asp-controller="Account" asp-action="Register">Register</a>
+                                </li>
+                                <!-- Log In link -->
+                                <li class="nav-item">
+                                    <a class="nav-link text-muted text-dark" style="font-weight: bold;" asp-controller="Account" asp-action="LogIn">Login</a>
+                                </li>
+                            }
+                        </ul>
                     </div>
                 </div>
             </div>

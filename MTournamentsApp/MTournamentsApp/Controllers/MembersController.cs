@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MTournamentsApp.Entities;
@@ -25,6 +26,7 @@ namespace MTournamentsApp.Controllers
             return players;
         }
 
+        [Authorize()]
         [HttpGet()]
         public IActionResult Add()
         {
@@ -34,6 +36,7 @@ namespace MTournamentsApp.Controllers
             return View(new PlayerViewModel() { Player = new Player(), RolesList = playerRoles, TeamsList = teams });
         }
 
+        [Authorize()]
         [HttpPost()]
         public IActionResult Add(PlayerViewModel p)
         {
@@ -112,7 +115,8 @@ namespace MTournamentsApp.Controllers
 			}
 		}
 
-		[HttpGet()]
+        [Authorize()]
+		    [HttpGet()]
         public IActionResult Edit(int id)
         {
             List<PlayerRole> playerRoles = _tournamentsDbContext.PlayerRoles.OrderBy(pr => pr.PlayerRoleName).ToList();
@@ -129,6 +133,7 @@ namespace MTournamentsApp.Controllers
             }
         }
 
+        [Authorize()]
         [HttpPost()]
         public IActionResult Edit(PlayerViewModel p)
         {
@@ -147,6 +152,7 @@ namespace MTournamentsApp.Controllers
             }
         }
 
+        [Authorize()]
         [HttpGet()]
         public IActionResult Kick(int playerId, string teamId)
         {
@@ -158,6 +164,7 @@ namespace MTournamentsApp.Controllers
             return RedirectToAction("List", "Teams", new { id = teamId });
         }
 
+        [Authorize()]
         [HttpGet()]
         public IActionResult Delete(int id)
         {
@@ -172,6 +179,7 @@ namespace MTournamentsApp.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost()]
         public IActionResult Delete(Player p)
         {
