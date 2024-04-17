@@ -40,6 +40,7 @@ namespace MTournamentsApp.Entities
             }
         }
 
+        [Required(ErrorMessage = "Please provide the player's role")]
         public string? PlayerRoleId { get; set; }
         public PlayerRole? Role { get; set; }
 

@@ -7,28 +7,51 @@
 <p class="h1 mb-3">Teams List</p>
 <a class="btn btn-primary mb-3" asp-controller="Teams" asp-action="Add">Add New Team</a>
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Team Name</th>
-            <th>Team Description</th>
-            <th>Game</th>
-            <th># of Passed Tournaments</th>
-            <th># of Members</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Team t in Model)
-        {
-            <tr>
-                <td>@t.TeamName</td>
-                <td>@t.TeamDescription</td>
-                <td>@t.MainTeamGame?.GameName</td>
-                <td>@t.Tournaments?.Count()</td>
-                <td><a asp-controller="Teams" asp-action="Members" asp-route-id="@t.TeamId">@t.Players?.Count()</a></td>
-                <td class="text-center"><a asp-controller="Teams" asp-action="Edit" asp-route-id="@t.TeamId">Edit</a><span class="mx-3">|</span><a asp-controller="Teams" asp-action="Delete" asp-route-id="@t.TeamId">Delete</a></td>
-            </tr>
-        }
-    </tbody>
-</table>
+@if (Model != null)
+{
+    if (Model.Count() > 0)
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Team Name</th>
+                    <th>Team Description</th>
+                    <th>Game</th>
+                    <th># of Passed Tournaments</th>
+                    <th># of Members</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Team t in Model)
+                {
+                    <tr>
+                        <td>@t.TeamName</td>
+                        <td>@t.TeamDescription</td>
+                        <td>@t.MainTeamGame?.GameName</td>
+                        <td>@t.Tournaments?.Count()</td>
+                        <td>
+                            @if (t.Players != null && t.Players.Count() > 0)
+                            {
+                                <a asp-controller="Teams" asp-action="Members" asp-route-id="@t.TeamId">@t.Players.Count()</a>
+                            }
+                            else
+                            {
+                                @t.Players?.Count()
+                            }
+                        </td>
+                        <td class="text-center"><a asp-controller="Teams" asp-action="Edit" asp-route-id="@t.TeamId">Edit</a><span class="mx-3">|</span><a asp-controller="Teams" asp-action="Delete" asp-route-id="@t.TeamId">Delete</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted h3 mb-4 text-center">No teams are currently registered.</p>
+    }
+}
+else
+{
+    <p class="text-muted h3 mb-4 text-center">No teams are currently registered.</p>
+}

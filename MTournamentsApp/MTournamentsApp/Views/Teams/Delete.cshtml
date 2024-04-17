@@ -3,12 +3,12 @@
 @{
     ViewData["Title"] = "Delete Team";
 }
-<a class="text-muted mt-3 mb-0 btn btn-lg" onclick="javascript:window.history.back();"><- Back</a>
 
-<p class="h1 mb-4 text-center">Deleting an existing team</p>
+<a class="mt-3 mb-0 btn btn-secondary" onclick="javascript:window.history.back();">← Back</a>
+<p class="h1 mb-4 text-center">Delete an existing team</p>
 
 <form class="row gx-4" asp-controller="Teams" asp-action="Delete" method="post" enctype="application/x-www-form-urlencoded">
-    <h3 class="col-10">Confirm Deletion</h3>
+    <h3 class="col-10">Confirm Team Deletion</h3>
     <p class="col-10 mt-1">Are you sure you want to delete the team "<strong>@Model.TeamName</strong>" which currently has <strong>@Model.Players?.Count</strong> members?</p>
 
     <input type="hidden" asp-for="TeamId" />

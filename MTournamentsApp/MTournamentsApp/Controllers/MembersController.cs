@@ -7,7 +7,7 @@ using MTournamentsApp.Models;
 
 namespace MTournamentsApp.Controllers
 {
-    public class MembersController : Controller
+	public class MembersController : Controller
     {
         private TournamentsDbContext _tournamentsDbContext;
 
@@ -75,8 +75,48 @@ namespace MTournamentsApp.Controllers
             }
         }
 
+		[HttpGet("Members/REST/List")]
+		public async Task<IActionResult> RESTList()
+		{
+			var membersList = _tournamentsDbContext.Players
+				.Select(m => new
+				{
+					m.Id,
+					m.FirstName,
+					m.LastName,
+					m.DateOfBirth,
+					m.Email,
+					m.Age,
+                    m.PlayerRoleId
+				})
+				.ToList();
+
+			return Ok(new { members = membersList, total = membersList.Count() });
+		}
+
+		[HttpPost("Members/REST/Add")]
+		public async Task<IActionResult> RESTAdd([FromBody] Player player)
+		{
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					return BadRequest(ModelState);
+				}
+
+				await _tournamentsDbContext.Players.AddAsync(player);
+				await _tournamentsDbContext.SaveChangesAsync();
+
+				return Ok(new { memberId = player.Id });
+			}
+			catch (Exception exception)
+			{
+				return StatusCode(500, exception.Message);
+			}
+		}
+
         [Authorize()]
-        [HttpGet()]
+		    [HttpGet()]
         public IActionResult Edit(int id)
         {
             List<PlayerRole> playerRoles = _tournamentsDbContext.PlayerRoles.OrderBy(pr => pr.PlayerRoleName).ToList();
@@ -121,7 +161,7 @@ namespace MTournamentsApp.Controllers
 
             _tournamentsDbContext.SaveChanges();
 
-            return RedirectToAction("Members", "Teams", new { id = teamId });
+            return RedirectToAction("List", "Teams", new { id = teamId });
         }
 
         [Authorize()]
