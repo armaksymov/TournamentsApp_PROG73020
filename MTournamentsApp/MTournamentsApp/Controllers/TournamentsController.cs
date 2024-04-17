@@ -31,7 +31,7 @@ namespace MTournamentsApp.Controllers
 
             foreach (var tournament in tournaments)
             {
-                tournament.TournamentTeams = _tournamentsDbContext.Teams.Where(t => t.TournamentIds.Contains(tournament.Id)).OrderBy(t => t.TeamId).ToList();
+                tournament.TournamentTeams = _tournamentsDbContext.Teams.Where(t => tournament.TeamIds.Any(teamId => teamId == t.TeamId)).ToList();
             }
 
             return tournaments;
@@ -325,6 +325,34 @@ namespace MTournamentsApp.Controllers
             _tournamentsDbContext.SaveChanges();
 
             return View("List", getTournaments());
+        }
+
+
+        [HttpGet()]
+        public IActionResult Teams(int id)
+        {
+            Tournament? tournament = _tournamentsDbContext.Tournaments.Where(t => t.Id == id).FirstOrDefault();
+            if (tournament == null)
+            {
+                return RedirectToAction("List", "Tournaments");
+            }
+
+            tournament.TournamentTeams = _tournamentsDbContext.Teams.Where(t => tournament.TeamIds.Any(teamId => teamId == t.TeamId)).ToList();
+
+            foreach(var team in tournament.TournamentTeams)
+            {
+                team.Players = _tournamentsDbContext.Players.Where(p => p.TeamId == team.TeamId).OrderBy(p => p.Id).ToList();
+                team.Tournaments = _tournamentsDbContext.Tournaments.Where(t => t.TeamIds!.Contains(team.TeamId!)).ToList();
+            }
+
+            if (tournament.TournamentTeams != null)
+            {
+                return View(tournament.TournamentTeams);
+            }
+            else
+            {
+                return RedirectToAction("List", "Tournaments");
+            }
         }
     }
 }

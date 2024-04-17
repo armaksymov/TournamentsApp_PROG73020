@@ -30,7 +30,16 @@
                         <td>@t.TournamentDate?.Date.ToString("MMM dd, yyyy")</td>
                         <td>@t.TournamentGame?.GameName</td>
                         <td>@t.Address?.ToString()</td>
-                        <td>@t.TeamIds.Count()</td>
+                        <td>
+                            @if (t.TeamIds != null && t.TeamIds.Count() > 0)
+                            {
+                                <a asp-controller="Tournaments" asp-action="Teams" asp-route-id="@t.Id">@t.TeamIds.Count()</a>
+                            }
+                            else
+                            {
+                                @t.TournamentTeams?.Count()
+                            }
+                        </td>
                         <td class="text-center"><a asp-controller="Tournaments" asp-action="Manage" asp-route-id="@t.Id">Manage</a><span class="mx-3">|</span><a asp-controller="Tournaments" asp-action="Edit" asp-route-id="@t.Id">Edit</a><span class="mx-3">|</span><a asp-controller="Tournaments" asp-action="Cancel" asp-route-id="@t.Id">Cancel</a></td>
                     </tr>
                 }
