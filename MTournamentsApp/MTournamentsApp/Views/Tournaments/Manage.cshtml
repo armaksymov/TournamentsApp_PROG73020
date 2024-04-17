@@ -45,7 +45,6 @@
                                     <button id="expandButton">Expand</button>
                                 </div>
                                 <script>
-                                    
                                     document.addEventListener('DOMContentLoaded', function() {
                                         var expandButton = document.getElementById('expandButton');
                                         var playerList = document.getElementById('playerList');
@@ -69,8 +68,18 @@
                                 <p class="text-muted">No Team Participants Found</p>
                             }
                         </td>
-                        <td></td>
-                        <td class="text-center"><a asp-controller="Teams" asp-action="Invite" asp-route-id="@t.TeamId">Invite</a><span class="mx-3">|</span><a asp-controller="Teams" asp-action="Kick" asp-route-id="@t.TeamId">Kick Out</a></td>
+                        <td>
+                            
+                        </td>
+
+                        @if (t.Players.Any(p => p.Role.PlayerRoleId == "L" || p.Role.PlayerRoleId == "C"))
+                        {
+                            <td class="text-center"><a asp-controller="Teams" asp-action="Invite" asp-route-id="@t.TeamId">Invite</a><span class="mx-3">|</span><a asp-controller="Teams" asp-action="Kick" asp-route-id="@t.TeamId">Kick Out</a></td>
+                        }
+                        else
+                        {
+                            <td>Team has no team leader / coach, actions unavailable.</td>
+                        }
                     </tr>
                 }
             </tbody>
